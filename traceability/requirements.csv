@@ -101,3 +101,8 @@ REQ-099,On resume failure SDK should clear and fall back,On resume failure the S
 REQ-100,SDK should declare all capabilities as true,The SDK SHOULD declare all four capabilities (streaming, subscriptions, sampling, elicitation) as true in tesseron/hello.,high,draft,Spec §5.2
 REQ-101,requiresConfirmation action must not be called uninvited,An action annotated with requiresConfirmation SHALL NOT be called without explicit user confirmation.,critical,draft,Spec §7.5
 REQ-102,Agent must re-claim after reconnect,After a disconnect and reconnect the agent SHALL re-claim the session using the new claim code.,critical,draft,Spec §14.4
+REQ-103,Pyodide transport must use browser-native WebSocket,The Pyodide transport SHALL use the browser-native WebSocket API via Pyodide FFI (js.WebSocket) instead of the websockets library.,critical,draft,Pyodide §Transport
+REQ-104,Pyodide transport must clean up FFI proxies on close,The Pyodide transport SHALL destroy all create_proxy instances on close to prevent browser memory leaks.,critical,draft,Pyodide §Transport
+REQ-105,Pyodide transport must bridge JS callbacks to asyncio,The Pyodide transport SHALL bridge event-driven JavaScript WebSocket callbacks (onopen onmessage onclose onerror) to asyncio primitives (Event Queue).,critical,draft,Pyodide §Transport
+REQ-106,Pyodide transport must match client transport interface,The Pyodide transport SHALL implement the same public interface as WebSocketClientTransport (start send close messages wait_for_connection).,critical,draft,Pyodide §Transport
+REQ-107,Pyodide transport must request tesseron-gateway subprotocol,The Pyodide transport SHALL pass tesseron-gateway as subprotocol to the browser WebSocket constructor.,high,draft,Pyodide §Transport

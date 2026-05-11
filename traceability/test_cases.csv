@@ -129,3 +129,11 @@ SEC-05,Claim breadcrumb mode 0o600,tests/test_security.py::test_sec05_claim_brea
 SEC-06,RequiresConfirmation rejects uninvited invocation,tests/test_security.py::test_sec06_requires_confirmation_action_rejects_uninvited_invocation,unit,passing
 API-01,Action decorator registers action,tests/test_api.py::test_api01_action_decorator_registers_action,unit,passing
 API-02,ElicitationRequestParams require schema field,tests/test_api.py::test_api02_elicitation_request_params_require_schema_field,unit,passing
+PY-01,Pyodide transport connects and sets event,tests/test_transport_pyodide.py::test_py01_connect_sets_connection_event,unit,passing
+PY-02,Pyodide send serializes JSON via ws.send,tests/test_transport_pyodide.py::test_py02_send_serialises_dict_as_json,unit,passing
+PY-03,Pyodide incoming message queued via onmessage,tests/test_transport_pyodide.py::test_py03_incoming_message_queued_via_onmessage,unit,passing
+PY-04,Pyodide binary data coerced to UTF-8,tests/test_transport_pyodide.py::test_py04_binary_data_coerced_to_utf8,unit,passing
+PY-05,Pyodide close destroys proxies,tests/test_transport_pyodide.py::test_py05_close_calls_ws_close_and_destroys_proxies,unit,passing
+PY-06,Pyodide connection error handling,tests/test_transport_pyodide.py::test_py06_connection_error_terminates_messages_iterator,unit,passing
+PY-07,Pyodide messages iterator yields until close,tests/test_transport_pyodide.py::test_py07_messages_iterator_yields_until_close,unit,passing
+PY-08,Pyodide subprotocol tesseron-gateway,tests/test_transport_pyodide.py::test_py08_subprotocol_tesseron_gateway_passed_to_constructor,unit,passing
