@@ -20,6 +20,7 @@ results.json
 
 # Kuzu (derived artifact, built from CSVs)
 *.kuzu/
+*.kuzu
 
 # uv
 .python-version
