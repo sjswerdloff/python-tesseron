@@ -1,0 +1,103 @@
+id,title,description,priority,status,source
+REQ-001,Implementer must not consult TypeScript impl,The implementer SHALL NOT consult the TypeScript reference implementation.,critical,draft,Spec §Preamble
+REQ-002,Notifications must not receive a response,Notifications (messages with no id field) SHALL NOT receive a response.,critical,draft,Spec §2.1
+REQ-003,ID may be string number or null,The id field MAY be a string, number, or null.,medium,draft,Spec §2.2
+REQ-004,SDK should use monotonically incrementing IDs,The SDK SHOULD use monotonically incrementing integers for request IDs.,high,draft,Spec §2.2
+REQ-005,Responding peer must echo exact request ID,The responding peer SHALL echo the exact same id as the request.,critical,draft,Spec §2.2
+REQ-006,SDK must maintain pending request map,The SDK SHALL maintain a map of pending outbound requests keyed by id.,critical,draft,Spec §2.2
+REQ-007,SDK must resolve and remove pending on response,On receiving a response the SDK SHALL look up the id, resolve or reject, and remove the entry.,critical,draft,Spec §2.2
+REQ-008,Pending requests rejected on transport close,On transport close ALL pending requests SHALL be rejected with a TransportClosedError.,critical,draft,Spec §2.2
+REQ-009,hello must be the first message,tesseron/hello SHALL be the first message sent after the connection is established.,critical,draft,Spec §2.3
+REQ-010,Transport must provide reliable ordered delivery,Every transport binding SHALL provide reliable ordered delivery with no best-effort, no reordering, and no gaps.,critical,draft,Spec §3.1
+REQ-011,Transport must deliver one envelope per message,Every transport binding SHALL deliver one JSON-RPC envelope per logical message with no batching and no visible fragmentation.,critical,draft,Spec §3.1
+REQ-012,Transport must be symmetric duplex,Every transport binding SHALL be symmetric duplex allowing either side to send at any time.,critical,draft,Spec §3.1
+REQ-013,Transport must be single connection per session,Every transport binding SHALL use a single connection per session; tesseron/hello opens and close terminates the session.,critical,draft,Spec §3.1
+REQ-014,Transport must use local IPC threat model,Every transport binding SHALL operate within the same-process or same-user threat model as local IPC.,critical,draft,Spec §3.1
+REQ-015,WS binary frames should be coerced to UTF-8,Binary WebSocket frames SHOULD be coerced to UTF-8 text and parsed as defensive tolerance.,high,draft,Spec §3.2
+REQ-016,App must advertise tesseron-gateway subprotocol,The app SHALL advertise the tesseron-gateway subprotocol in its WebSocket handshake response.,critical,draft,Spec §3.2
+REQ-017,App must reject upgrades without correct subprotocol,The app SHALL reject WebSocket upgrade requests that do not carry the tesseron-gateway subprotocol.,critical,draft,Spec §3.2
+REQ-018,App must bind to loopback only (WS),The app SHALL bind its WebSocket server to loopback only (127.0.0.1 or ::1).,critical,draft,Spec §3.2
+REQ-019,App must accept exactly one WS upgrade,The app SHALL accept exactly one WebSocket upgrade that carries tesseron-gateway and reject all others.,critical,draft,Spec §3.2
+REQ-020,App must delete manifest on WS close,The app SHALL delete its manifest file when the WebSocket connection closes.,critical,draft,Spec §3.2
+REQ-021,UDS app must create private temp directory,The app SHALL create a private directory with mode 0o700 under the system temp directory for UDS.,critical,draft,Spec §3.3
+REQ-022,UDS app must bind socket inside private directory,The app SHALL bind the UDS socket inside the private temp directory.,critical,draft,Spec §3.3
+REQ-023,UDS socket file should be chmod 0o600,The app SHOULD chmod 0o600 the UDS socket file after bind().,high,draft,Spec §3.3
+REQ-024,Manifest version field must be 2,The manifest version field SHALL be 2.,critical,draft,Spec §4.1
+REQ-025,Discovery directories must be mode 0o700,The discovery directories (~/.tesseron/instances/ and ~/.tesseron/tabs/) SHALL be created with mode 0o700 if they do not exist.,critical,draft,Spec §4.2
+REQ-026,Manifest files must be mode 0o600,Manifest files SHALL be written with mode 0o600.,critical,draft,Spec §4.2
+REQ-027,Instance ID should use inst- prefix,The instanceId SHOULD be a random string prefixed with inst-.,high,draft,Spec §4.3
+REQ-028,App must delete manifest on graceful shutdown,The app SHALL delete its manifest file on graceful shutdown.,critical,draft,Spec §4.4
+REQ-029,App should clean up on SIGINT and SIGTERM,On SIGINT and SIGTERM the app SHOULD clean up the manifest, close the transport, and exit.,high,draft,Spec §4.4
+REQ-030,protocolVersion must be 1.2.0 in hello,The protocolVersion field in tesseron/hello params SHALL be "1.2.0".,critical,draft,Spec §5.2
+REQ-031,app.id must match regex,The app.id field SHALL match the pattern /^[a-z][a-z0-9_]*$/.,critical,draft,Spec §5.2
+REQ-032,Reserved app IDs must not be used,The reserved app IDs tesseron, mcp, and system SHALL NOT be used.,critical,draft,Spec §5.2
+REQ-033,Handlers must trust welcome capabilities intersection,Handlers SHALL trust the capabilities intersection returned in welcome.capabilities.,critical,draft,Spec §5.3
+REQ-034,SDK must update agent identity on claimed,On receiving tesseron/claimed the SDK SHALL update the cached WelcomeResult with the new agent identity.,critical,draft,Spec §5.5
+REQ-035,SDK must clear claim code on claimed,On receiving tesseron/claimed the SDK SHALL clear the claimCode from the cached welcome.,critical,draft,Spec §5.5
+REQ-036,SDK must overwrite capabilities on claimed,On receiving tesseron/claimed the SDK SHALL overwrite capabilities in the cached welcome with agentCapabilities if present.,critical,draft,Spec §5.5
+REQ-037,Handlers must use agentCapabilities after claimed,Handlers SHALL use the agentCapabilities from tesseron/claimed as the authoritative capability set for ctx.agentCapabilities.,critical,draft,Spec §5.5
+REQ-038,App must stash resumeToken alongside sessionId,On a fresh tesseron/hello the app SHALL stash the resumeToken alongside sessionId received in the welcome response.,critical,draft,Spec §6.1
+REQ-039,App must persist new resumeToken after resume,The app SHALL persist the new resumeToken returned in the resume response overwriting the stored token.,critical,draft,Spec §6.1
+REQ-040,SDK must re-subscribe resources after resume,The SDK SHALL re-subscribe to resources after a successful session resume.,critical,draft,Spec §6.5
+REQ-041,Actions should use decorator with Pydantic models,Actions SHOULD be declared using decorators with Pydantic models in the Python SDK.,high,draft,Spec §7.1
+REQ-042,Invocation result must contain invocationId,The invocation result SHALL contain the invocationId field.,critical,draft,Spec §7.3
+REQ-043,Invocation result must contain output field,The invocation result SHALL contain the output field.,critical,draft,Spec §7.3
+REQ-044,SDK must validate input before handler,The SDK SHALL validate input against the action's Pydantic model or JSON Schema BEFORE invoking the handler.,critical,draft,Spec §7.4
+REQ-045,SDK must return InputValidation error on failure,On input validation failure the SDK SHALL return error code -32004 InputValidation with validation issues in error.data.,critical,draft,Spec §7.4
+REQ-046,Handler must not run on validation failure,On input validation failure the handler SHALL NOT run.,critical,draft,Spec §7.4
+REQ-047,Strict output must be validated against schema,If the action is configured with strict_output=True the SDK SHALL validate the return value against the output schema.,critical,draft,Spec §7.4
+REQ-048,Strict output failure returns HandlerError,On strict output validation failure the SDK SHALL return error code -32005 HandlerError with validation issues in error.data.,critical,draft,Spec §7.4
+REQ-049,Dynamic action registration must trigger notification,Actions registered after the initial tesseron/hello SHALL trigger an actions/list_changed notification.,critical,draft,Spec §7.6
+REQ-050,Action removal must trigger list_changed,Removing an action SHALL trigger an actions/list_changed notification with the updated list.,critical,draft,Spec §7.6
+REQ-051,Progress percent should increase monotonically,The percent field in progress notifications SHOULD increase monotonically.,high,draft,Spec §8.1
+REQ-052,SDK must fire cancellation signal on cancel,On receiving actions/cancel the SDK SHALL fire the cancellation signal for the corresponding invocation.,critical,draft,Spec §8.2
+REQ-053,Handler should check for cancellation and clean up,The handler SHOULD check for cancellation and clean up on receiving a cancellation signal.,high,draft,Spec §8.2
+REQ-054,SDK must return Cancelled error on cancel,On receiving actions/cancel the SDK SHALL return error code -32001 Cancelled.,critical,draft,Spec §8.2
+REQ-055,SDK must abort invocation after timeoutMs,The SDK SHALL abort the invocation after timeoutMs milliseconds (default: 60000).,critical,draft,Spec §8.2
+REQ-056,SDK must return Timeout error on timeout,On invocation timeout the SDK SHALL return error code -32002 Timeout.,critical,draft,Spec §8.2
+REQ-057,SDK must race handler against timeout or cancel,The SDK SHALL race the handler against the timeout or cancel signal so the agent receives its error response immediately.,critical,draft,Spec §8.2
+REQ-058,SDK should parse and validate sampling content,When a schema was provided in a sampling request the SDK SHOULD parse the content as JSON and validate it against the provided schema.,high,draft,Spec §9.2
+REQ-059,SDK should check sampling capability before calling,Before calling ctx.sample() the SDK SHOULD check ctx.agent_capabilities.sampling.,high,draft,Spec §9.4
+REQ-060,Handler must branch explicitly on elicit failure,For ctx.elicit() with structured data the handler SHALL branch explicitly or catch ElicitationNotAvailableError since there is no safe default.,critical,draft,Spec §10.1
+REQ-061,Elicit schema top level must be object type,The elicitation schema top level SHALL be of type object.,critical,draft,Spec §10.3
+REQ-062,Elicit schema properties must be primitive types,Each property in the elicitation schema SHALL be a primitive type (string, number, integer, or boolean).,critical,draft,Spec §10.3
+REQ-063,Elicit schema must not use oneOf anyOf allOf not,The elicitation schema SHALL NOT use oneOf, anyOf, allOf, or not at the top level.,critical,draft,Spec §10.3
+REQ-064,SDK must validate elicit schema before sending,The SDK SHALL validate the elicitation schema before sending and return -32602 InvalidParams if it violates MCP constraints.,critical,draft,Spec §10.3
+REQ-065,SDK must send empty-object schema for confirm,For ctx.confirm() the SDK SHALL send the schema {"type":"object","properties":{},"required":[]}.,critical,draft,Spec §10.4
+REQ-066,SDK should send permissive fallback elicit schema,When ctx.elicit() is called without an explicit jsonSchema the SDK SHOULD send the permissive fallback schema with a single string response property.,high,draft,Spec §10.5
+REQ-067,Callers should always provide elicit schema,For good UX callers SHOULD always provide a proper schema when calling ctx.elicit().,high,draft,Spec §10.5
+REQ-068,SDK must call cleanup on unsubscribe,On resources/unsubscribe the SDK SHALL call the cleanup function returned by the .subscribe() handler.,critical,draft,Spec §11.3
+REQ-069,Dynamic resource registration must trigger notification,Resources registered or removed after tesseron/hello SHALL trigger a resources/list_changed notification.,critical,draft,Spec §11.4
+REQ-070,All subscriptions must be cleaned up on transport close,On transport close ALL active subscriptions SHALL have their cleanup functions called.,critical,draft,Spec §11.5
+REQ-071,Subscription map must be cleared on transport close,On transport close the subscription map SHALL be cleared.,critical,draft,Spec §11.5
+REQ-072,Specific subscription cleanup must be called on unsubscribe,On resources/unsubscribe the specific subscription's cleanup function SHALL be called.,critical,draft,Spec §11.5
+REQ-073,Subscription must be removed from map on unsubscribe,On resources/unsubscribe the subscription SHALL be removed from the map.,critical,draft,Spec §11.5
+REQ-074,Handlers must trust capability intersection,The handler SHALL trust the capabilities intersection from welcome.capabilities.,critical,draft,Spec §12.1
+REQ-075,Gateway may send agentCapabilities in claimed,The gateway MAY send updated agentCapabilities in the tesseron/claimed notification.,medium,draft,Spec §12.3
+REQ-076,Capabilities must overwrite on claimed if present,When agentCapabilities is present in tesseron/claimed the SDK SHALL overwrite capabilities from the welcome with those values.,critical,draft,Spec §12.3
+REQ-077,SDK must provide typed error classes,The SDK SHALL provide typed error classes: TesseronError, SamplingNotAvailableError, ElicitationNotAvailableError, SamplingDepthExceededError, CancelledError, TimeoutError, and TransportClosedError.,critical,draft,Spec §13.3
+REQ-078,TesseronError must be mapped to JSON-RPC error,When a handler throws a TesseronError the SDK SHALL map it to a JSON-RPC error response with the corresponding code, message, and data.,critical,draft,Spec §13.4
+REQ-079,Non-TesseronError must map to HandlerError,When a handler throws any other exception the SDK SHALL map it to -32005 HandlerError with the exception's message.,critical,draft,Spec §13.4
+REQ-080,Incoming error must construct TesseronError,When an incoming JSON-RPC error response is received for a pending request the SDK SHALL construct a TesseronError with the error's code, message, and data and reject the pending request with it.,critical,draft,Spec §13.4
+REQ-081,Pending requests rejected with TransportClosedError,On transport close ALL pending outbound requests SHALL be rejected with TransportClosedError.,critical,draft,Spec §14.3
+REQ-082,In-flight invocations must have cancellation fired,On transport close ALL in-flight invocations SHALL have their cancellation signals fired.,critical,draft,Spec §14.3
+REQ-083,Active subscriptions must be cleaned up on close,On transport close ALL active subscriptions SHALL have their cleanup functions called.,critical,draft,Spec §14.3
+REQ-084,In-flight sample confirm elicit must reject on close,On transport close any sample(), confirm(), or elicit() in flight SHALL reject with TransportClosedError.,critical,draft,Spec §14.3
+REQ-085,SDK must not auto-reconnect silently,The SDK SHALL NOT auto-reconnect silently after a disconnect; calling connect() again yields a new sessionId and claimCode.,critical,draft,Spec §14.4
+REQ-086,Apps must bind to loopback only (security),Apps SHALL bind to loopback only (127.0.0.1 or ::1 for WS, private temp dir for UDS).,critical,draft,Spec §16.1
+REQ-087,Gateway must refuse non-loopback manifest URLs,The gateway SHALL refuse non-loopback URLs from manifests.,critical,draft,Spec §16.1
+REQ-088,tesseron directory must be mode 0o700,The ~/.tesseron/ directory SHALL have mode 0o700.,critical,draft,Spec §16.3
+REQ-089,Instance manifests must be mode 0o600 (security),Instance manifests SHALL have mode 0o600.,critical,draft,Spec §16.3
+REQ-090,Claim breadcrumb files must be mode 0o600,Claim breadcrumb files SHALL have mode 0o600.,critical,draft,Spec §16.3
+REQ-091,Acceptance tests must all be satisfied,A correct implementation SHALL satisfy all acceptance test scenarios described in Section 18.,critical,draft,Spec §18
+REQ-092,SDK must implement bidirectional JSON-RPC dispatcher,The SDK SHALL implement a bidirectional JSON-RPC dispatcher with on, on_notification, request, notify, receive, and reject_all_pending capabilities.,critical,draft,Spec §Appendix B
+REQ-093,Dispatcher must reject all pending on transport close,On transport close all pending outbound requests in the dispatcher SHALL be rejected via reject_all_pending.,critical,draft,Spec §Appendix B
+REQ-094,Dispatcher must send MethodNotFound for unregistered,If no handler is registered for a method the dispatcher SHALL send -32601 MethodNotFound.,critical,draft,Spec §Appendix B
+REQ-095,TesseronError in handler must produce error response,If the handler raises a TesseronError the dispatcher SHALL send an error response with its code, message, and data.,critical,draft,Spec §Appendix B
+REQ-096,Other exception in handler must send InternalError,If the handler raises any other exception the dispatcher SHALL send -32603 InternalError with the exception's message.,critical,draft,Spec §Appendix B
+REQ-097,Send failure must close transport,If send() fails due to a transport error the dispatcher SHALL close the transport so the peer sees a close and rejects its own pending requests.,critical,draft,Spec §Appendix B
+REQ-098,Appendix API naming may be adjusted for Python,The implementer MAY adjust API naming conventions to be more Pythonic while preserving behavioral equivalence.,medium,draft,Spec §Appendix A
+REQ-099,On resume failure SDK should clear and fall back,On resume failure the SDK SHOULD clear the stored credentials and fall back to a fresh tesseron/hello.,high,draft,Spec §6.4
+REQ-100,SDK should declare all capabilities as true,The SDK SHOULD declare all four capabilities (streaming, subscriptions, sampling, elicitation) as true in tesseron/hello.,high,draft,Spec §5.2
+REQ-101,requiresConfirmation action must not be called uninvited,An action annotated with requiresConfirmation SHALL NOT be called without explicit user confirmation.,critical,draft,Spec §7.5
+REQ-102,Agent must re-claim after reconnect,After a disconnect and reconnect the agent SHALL re-claim the session using the new claim code.,critical,draft,Spec §14.4
