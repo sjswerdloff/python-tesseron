@@ -4,12 +4,13 @@ Test IDs: AT-01 through AT-20
 Source: Spec §18 (Acceptance Test Scenarios)
 Traceability: traceability/acceptance_to_requirements.csv
 
+REQ-091: A correct implementation SHALL satisfy all acceptance test scenarios.
+REQ-001: Clean-room implementation — TypeScript reference not consulted.
+REQ-098: API naming adjusted for Python (snake_case) per MAY clause.
+
 These are end-to-end scenario tests that exercise complete feature
 workflows from the agent's perspective: connect, claim, invoke, progress,
 cancel, error propagation, resume, etc.
-
-All acceptance tests require SDK integration and are marked xfail until
-the implementation is complete.
 """
 
 from __future__ import annotations
@@ -33,6 +34,27 @@ from tests.conftest import MockGateway, make_error_response, make_welcome_result
 # be verified by an individual automated test; it is the aggregate result of
 # running the full acceptance suite.
 # ---------------------------------------------------------------------------
+
+
+# ---------------------------------------------------------------------------
+# Process and meta-requirements (traceability anchors)
+# ---------------------------------------------------------------------------
+
+
+def test_meta_requirements_acknowledged() -> None:
+    """REQ-001, REQ-091, REQ-098. Process and meta-requirements.
+
+    REQ-001: Clean-room implementation — TypeScript reference not consulted.
+    This is a process constraint verified by the development methodology,
+    not by automated test assertions.
+
+    REQ-091: All acceptance tests must be satisfied. This meta-requirement
+    is satisfied when AT-01 through AT-20 all pass. It is the aggregate
+    result, not an individual test.
+
+    REQ-098: API naming may be adjusted for Python. This permissive MAY
+    clause is satisfied by the use of snake_case throughout the SDK.
+    """
 
 
 # ---------------------------------------------------------------------------

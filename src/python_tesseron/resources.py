@@ -54,7 +54,7 @@ class ResourceDefinition:
             name=self.name,
             description=self.description,
             subscribable=self.subscribable,
-            outputSchema=self.output_schema,
+            output_schema=self.output_schema,
         )
 
 

@@ -173,8 +173,8 @@ class SessionResumeManager:
         caps = CapabilityNegotiation().app_declared()
 
         resume = ResumeParams(
-            sessionId=self._credentials.session_id,
-            resumeToken=self._credentials.resume_token,
+            session_id=self._credentials.session_id,
+            resume_token=self._credentials.resume_token,
             app=app_meta,
             actions=actions,
             resources=resources,

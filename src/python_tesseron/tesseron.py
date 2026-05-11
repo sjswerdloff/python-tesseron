@@ -191,6 +191,7 @@ class Tesseron:
         self._session.to_handshaking()
 
         # Start transport
+        transport_descriptor: WsTransportType | UdsTransportType
         if transport == "ws":
             ws_transport = WebSocketTransport()
             await ws_transport.start()
@@ -571,7 +572,7 @@ class Tesseron:
             raise InternalError("Invocation completed without setting result")
 
         inv_result = InvocationResult(
-            invocationId=invoke_params.invocation_id,
+            invocation_id=invoke_params.invocation_id,
             output=output,
         )
         return inv_result.model_dump(by_alias=True)
@@ -708,7 +709,7 @@ class Tesseron:
         """
         if self._dispatcher is None:
             return
-        updated = ResourceUpdatedParams(subscriptionId=subscription_id, value=value)
+        updated = ResourceUpdatedParams(subscription_id=subscription_id, value=value)
         try:
             await self._dispatcher.notify("resources/updated", updated.model_dump(by_alias=True))
         except Exception:

@@ -81,11 +81,11 @@ class ActionDefinition:
         return ActionManifestEntry(
             name=self.name,
             description=self.description,
-            inputSchema=self.input_schema,
-            outputSchema=self.output_schema,
+            input_schema=self.input_schema,
+            output_schema=self.output_schema,
             annotations=self.annotations,
-            timeoutMs=self.timeout_ms if self.timeout_ms != _DEFAULT_TIMEOUT_MS else None,
-            strictOutput=self.strict_output,
+            timeout_ms=self.timeout_ms if self.timeout_ms != _DEFAULT_TIMEOUT_MS else None,
+            strict_output=self.strict_output,
         )
 
 

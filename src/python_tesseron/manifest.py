@@ -108,9 +108,9 @@ class DiscoveryManifest:
         _DISCOVERY_DIR.chmod(_DIR_MODE)
 
         manifest = InstanceManifest(
-            instanceId=self.instance_id,
-            appName=self.app_name,
-            addedAt=int(time.time() * 1000),
+            instance_id=self.instance_id,
+            app_name=self.app_name,
+            added_at=int(time.time() * 1000),
             pid=os.getpid(),
             transport=transport,
         )
