@@ -93,8 +93,10 @@ async def test_er04_invalid_params_returns_32602(mock_gateway: MockGateway) -> N
 @pytest.mark.error_model
 @pytest.mark.xfail(reason="implementation pending: SDK internal error handling not yet implemented")
 async def test_er05_internal_error_returns_32603_with_message(mock_gateway: MockGateway) -> None:
-    """ER-05. InternalError: handler raises unexpected exception, receive -32603.
+    """ER-05: REQ-096. InternalError: handler raises unexpected exception, receive -32603.
 
+    REQ-096: if the handler raises any other exception the dispatcher SHALL
+    send -32603 InternalError with the exception's message.
     If a handler raises an unexpected (non-TesseronError) exception, the
     peer receives -32603 InternalError with the exception's message.
     """
@@ -115,10 +117,12 @@ async def test_er06_protocol_mismatch_returns_32000(mock_gateway: MockGateway) -
 @pytest.mark.error_model
 @pytest.mark.xfail(reason="implementation pending: SDK cancellation handling not yet implemented")
 async def test_er07_cancelled_returns_32001_to_handler(mock_gateway: MockGateway) -> None:
-    """ER-07: REQ-053. Cancelled: agent sends actions/cancel during invocation.
+    """ER-07: REQ-052, REQ-053, REQ-054. Cancelled: agent sends actions/cancel during invocation.
 
-    When the gateway sends actions/cancel for an in-flight invocation,
-    the handler should receive a cancellation signal (CancelledError).
+    REQ-052: on receiving actions/cancel the SDK SHALL fire the cancellation
+    signal for the corresponding invocation.
+    REQ-054: on receiving actions/cancel the SDK SHALL return error code -32001 Cancelled.
+    REQ-053: the handler SHOULD check for cancellation and clean up.
     """
     raise NotImplementedError
 
@@ -252,9 +256,11 @@ async def test_er18_resume_failed_returns_32011(mock_gateway: MockGateway) -> No
 @pytest.mark.error_model
 @pytest.mark.xfail(reason="implementation pending: SDK error mapping not yet implemented")
 async def test_er19_tesseron_error_maps_to_matching_wire_error(mock_gateway: MockGateway) -> None:
-    """ER-19: REQ-078. TesseronError from handler maps to JSON-RPC error with matching code/message/data.
+    """ER-19: REQ-078, REQ-095. TesseronError from handler maps to JSON-RPC error with matching code/message/data.
 
-    A handler that raises TesseronError(code=-32003, message="x", data={"y": 1})
+    REQ-095: if the handler raises a TesseronError the dispatcher SHALL send
+    an error response with its code, message, and data.
+    A handler raising TesseronError(code=-32003, message="x", data={"y": 1})
     must produce exactly that error on the wire.
     """
     raise NotImplementedError
@@ -274,11 +280,11 @@ async def test_er20_non_tesseron_error_maps_to_32005(mock_gateway: MockGateway) 
 @pytest.mark.error_model
 @pytest.mark.xfail(reason="implementation pending: SDK error response handling not yet implemented")
 async def test_er21_incoming_error_constructs_tesseron_error(mock_gateway: MockGateway) -> None:
-    """ER-21. Incoming JSON-RPC error constructs TesseronError and rejects pending request.
+    """ER-21: REQ-080. Incoming JSON-RPC error constructs TesseronError and rejects pending request.
 
-    When a JSON-RPC error response arrives for a pending request, the SDK
-    must construct a TesseronError with code, message, and data from the
-    error object, and use it to reject the pending future/promise.
+    REQ-080: when an incoming JSON-RPC error response is received for a
+    pending request the SDK SHALL construct a TesseronError with the error's
+    code, message, and data and reject the pending request with it.
     """
     raise NotImplementedError
 

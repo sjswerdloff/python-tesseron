@@ -256,10 +256,12 @@ async def test_st16_inflight_sample_elicit_rejected_with_transport_closed(mock_g
 @pytest.mark.state_transition
 @pytest.mark.xfail(reason="implementation pending: SDK connect/disconnect not yet implemented")
 async def test_st17_reconnect_yields_new_session_id_and_claim_code(mock_gateway: MockGateway) -> None:
-    """ST-17: REQ-013. connect() after disconnect yields NEW sessionId and NEW claimCode.
+    """ST-17: REQ-013, REQ-102. connect() after disconnect yields NEW sessionId and NEW claimCode.
 
+    REQ-102: after a disconnect and reconnect the agent SHALL re-claim the
+    session using the new claim code.
     Disconnect the transport, reconnect without resume credentials, verify
-    a completely new session with different IDs.
+    a completely new session with different IDs, and that reclaiming is required.
     """
     raise NotImplementedError
 
@@ -267,8 +269,10 @@ async def test_st17_reconnect_yields_new_session_id_and_claim_code(mock_gateway:
 @pytest.mark.state_transition
 @pytest.mark.xfail(reason="implementation pending: SDK auto-reconnect prohibition not yet implemented")
 async def test_st18_sdk_must_not_auto_reconnect_silently(mock_gateway: MockGateway) -> None:
-    """ST-18. SDK MUST NOT auto-reconnect silently.
+    """ST-18: REQ-085. SDK MUST NOT auto-reconnect silently.
 
+    REQ-085: the SDK SHALL NOT auto-reconnect silently after a disconnect;
+    calling connect() again yields a new sessionId and claimCode.
     Close the transport. Verify the SDK does NOT automatically attempt
     reconnection. The application must call connect() explicitly.
     """

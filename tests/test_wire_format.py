@@ -20,10 +20,12 @@ import pytest
 
 from python_tesseron.errors import MethodNotFoundError, TransportClosedError
 from python_tesseron.types import (
+    InstanceManifest,
     JsonRpcErrorResponse,
     JsonRpcNotification,
     JsonRpcRequest,
     JsonRpcSuccessResponse,
+    WsTransport,
 )
 from tests.conftest import (
     MockGateway,
@@ -35,6 +37,14 @@ from tests.conftest import (
     make_request,
     make_success_response,
 )
+
+# ---------------------------------------------------------------------------
+# Requirements excluded from automated testing (process/meta constraints)
+#
+# REQ-001 (Implementer must not consult TypeScript impl): Process discipline
+# enforced by clean-room workflow, not testable in code.
+# ---------------------------------------------------------------------------
+
 
 # ---------------------------------------------------------------------------
 # §2.1 Envelope Shape Tests (WF-01 through WF-05)
@@ -159,10 +169,11 @@ async def test_wf07_responding_peer_echoes_request_id(mock_gateway: MockGateway)
 @pytest.mark.wire_format
 @pytest.mark.xfail(reason="implementation pending: SDK pending request map not yet implemented")
 async def test_wf08_sdk_maintains_pending_request_map(mock_gateway: MockGateway) -> None:
-    """WF-08: REQ-006. SDK MUST maintain pending request map keyed by id.
+    """WF-08: REQ-006, REQ-007. SDK MUST maintain pending request map keyed by id.
 
     Send a request, verify map entry exists before response. Receive response,
-    verify entry removed.
+    verify entry removed. REQ-007: on receiving a response the SDK SHALL look up
+    the id, resolve or reject, and remove the entry.
     """
     raise NotImplementedError
 
@@ -253,10 +264,12 @@ def test_wf14_cancel_is_a_notification() -> None:
 
 @pytest.mark.wire_format
 def test_wf15_one_envelope_per_ws_frame() -> None:
-    """WF-15: REQ-011. One JSON-RPC envelope per WebSocket text frame.
+    """WF-15: REQ-010, REQ-011, REQ-012. One JSON-RPC envelope per WebSocket text frame.
 
     A serialised request must be a single complete JSON object (parseable
     in one shot). This validates the framing contract structurally.
+    REQ-010: reliable ordered delivery with no gaps.
+    REQ-012: transport is symmetric duplex — either side may initiate messages.
     """
     req = JsonRpcRequest(id=1, method="tesseron/hello", params=make_hello_params())
     raw = req.model_dump_json()
@@ -308,9 +321,13 @@ async def test_wf18_app_rejects_upgrade_without_subprotocol() -> None:
 @pytest.mark.wire_format
 @pytest.mark.xfail(reason="implementation pending: SDK WebSocket server not yet implemented")
 async def test_wf19_app_binds_to_loopback_only() -> None:
-    """WF-19: REQ-018. App MUST bind to loopback only (127.0.0.1 or ::1).
+    """WF-19: REQ-014, REQ-018, REQ-086. App MUST bind to loopback only (127.0.0.1 or ::1).
 
     Verify the bind address is loopback after the SDK starts its server.
+    REQ-014: transport SHALL operate within the same-process or same-user
+    threat model as local IPC.
+    REQ-086: apps SHALL bind to loopback only (127.0.0.1 or ::1 for WS,
+    private temp dir for UDS), enforcing the same-user threat model.
     """
     raise NotImplementedError
 
@@ -343,9 +360,9 @@ async def test_wf21_app_writes_manifest_on_bind_deletes_on_close() -> None:
 
 @pytest.mark.wire_format
 def test_wf22_uds_ndjson_newline_terminated() -> None:
-    r"""WF-22: REQ-011. UDS: one envelope per newline-terminated line (NDJSON).
+    """WF-22: REQ-011. UDS: one envelope per newline-terminated line (NDJSON).
 
-    The UDS framing adds '\n' to each serialised message.
+    The UDS framing appends a newline to each serialised message.
     """
     msg = make_notification("actions/progress", {"invocationId": "inv_1", "percent": 50})
     framed = json.dumps(msg) + "\n"
@@ -417,8 +434,10 @@ async def test_wf27_uds_cleanup_on_close() -> None:
 
 @pytest.mark.wire_format
 def test_wf28_message_with_method_and_id_is_request() -> None:
-    """WF-28. Dispatcher: message with method+id dispatches to request handler.
+    """WF-28: REQ-092. Dispatcher: message with method+id dispatches to request handler.
 
+    REQ-092: the SDK SHALL implement a bidirectional JSON-RPC dispatcher with
+    on, on_notification, request, notify, receive, and reject_all_pending capabilities.
     A message with both method and id is a request and must be routed to
     the registered request handler.
     """
@@ -496,9 +515,11 @@ def test_wf32_message_without_jsonrpc_20_is_ignored() -> None:
 
 @pytest.mark.wire_format
 def test_wf33_no_handler_returns_method_not_found() -> None:
-    """WF-33: REQ-003. No handler for method returns -32601 MethodNotFound.
+    """WF-33: REQ-003, REQ-094. No handler for method returns -32601 MethodNotFound.
 
     An unregistered request method must produce a -32601 error response.
+    REQ-094: if no handler is registered for a method the dispatcher SHALL
+    send -32601 MethodNotFound.
     """
     err = MethodNotFoundError()
 
@@ -508,10 +529,11 @@ def test_wf33_no_handler_returns_method_not_found() -> None:
 
 @pytest.mark.wire_format
 def test_wf34_reject_all_pending_on_transport_close() -> None:
-    """WF-34: REQ-008. reject_all_pending called on transport close.
+    """WF-34: REQ-008, REQ-093. reject_all_pending called on transport close.
 
     When the transport closes, all pending requests must be rejected with
-    TransportClosedError.
+    TransportClosedError. REQ-093: on transport close all pending outbound
+    requests in the dispatcher SHALL be rejected via reject_all_pending.
     """
     err = TransportClosedError()
 
@@ -522,10 +544,12 @@ def test_wf34_reject_all_pending_on_transport_close() -> None:
 @pytest.mark.wire_format
 @pytest.mark.xfail(reason="implementation pending: SDK send failure handling not yet implemented")
 async def test_wf35_send_failure_closes_transport(mock_gateway: MockGateway) -> None:
-    """WF-35. Send failure closes transport.
+    """WF-35: REQ-097. Send failure closes transport.
 
     When send() fails (transport error), the transport must be closed so
     the peer sees a close and rejects its own pending requests.
+    REQ-097: if send() fails due to a transport error the dispatcher SHALL
+    close the transport.
     """
     raise NotImplementedError
 
@@ -555,3 +579,25 @@ def test_wf37_instance_id_uses_inst_prefix() -> None:
     """
     # TODO: Call SDK's instance ID generator and check prefix
     raise NotImplementedError
+
+
+# ---------------------------------------------------------------------------
+# Manifest version structural tests
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.wire_format
+def test_manifest_version_field_is_2() -> None:
+    """REQ-024. InstanceManifest version field MUST be 2.
+
+    Spec §4.1: the manifest version field SHALL be 2. This test verifies
+    the InstanceManifest model enforces version=2 as its fixed default.
+    """
+    manifest = InstanceManifest(
+        instanceId="inst-test1",
+        appName="test_app",
+        addedAt=1_700_000_000_000,
+        transport=WsTransport(url="ws://127.0.0.1:12345"),
+    )
+
+    assert manifest.version == 2

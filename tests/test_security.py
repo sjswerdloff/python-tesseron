@@ -140,8 +140,9 @@ async def test_sec02_manifest_contains_only_loopback_url() -> None:
 @pytest.mark.security
 @pytest.mark.xfail(reason="implementation pending: SDK manifest directory creation not yet implemented")
 async def test_sec03_tesseron_directory_mode_is_0o700() -> None:
-    """SEC-03: REQ-025. ~/.tesseron/ directory must be created with mode 0o700.
+    """SEC-03: REQ-025, REQ-088. ~/.tesseron/ directory must be created with mode 0o700.
 
+    REQ-088: the ~/.tesseron/ directory SHALL have mode 0o700.
     After the SDK creates (or uses) the discovery directory, verify its
     permissions are exactly 0o700.
     """
@@ -156,8 +157,9 @@ async def test_sec03_tesseron_directory_mode_is_0o700() -> None:
 @pytest.mark.security
 @pytest.mark.xfail(reason="implementation pending: SDK manifest file creation not yet implemented")
 async def test_sec04_manifest_file_mode_is_0o600() -> None:
-    """SEC-04: REQ-026. Instance manifest files must be written with mode 0o600.
+    """SEC-04: REQ-026, REQ-089. Instance manifest files must be written with mode 0o600.
 
+    REQ-089: instance manifests SHALL have mode 0o600.
     After the SDK writes the instance manifest, verify the file's
     permissions are exactly 0o600.
     """

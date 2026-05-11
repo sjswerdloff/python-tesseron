@@ -19,6 +19,16 @@ import pytest
 from tests.conftest import MockGateway
 
 # ---------------------------------------------------------------------------
+# Requirements excluded from automated testing (process/meta constraints)
+#
+# REQ-091 (Acceptance tests must all be satisfied): Meta-requirement — this
+# requirement is satisfied when all AT-01 through AT-20 tests pass. It cannot
+# be verified by an individual automated test; it is the aggregate result of
+# running the full acceptance suite.
+# ---------------------------------------------------------------------------
+
+
+# ---------------------------------------------------------------------------
 # AT-01: Basic Action Discovery
 # ---------------------------------------------------------------------------
 

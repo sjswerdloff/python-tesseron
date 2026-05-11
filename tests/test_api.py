@@ -16,6 +16,16 @@ import pytest
 from python_tesseron.types import ActionManifestEntry
 
 # ---------------------------------------------------------------------------
+# Requirements excluded from automated testing (design/MAY constraints)
+#
+# REQ-098 (API naming may be adjusted for Python): Design choice — the spec
+# explicitly says the implementer MAY adjust API naming to be more Pythonic
+# while preserving behavioral equivalence. No behavioral test is needed or
+# possible for a permissive naming convention.
+# ---------------------------------------------------------------------------
+
+
+# ---------------------------------------------------------------------------
 # API-01: Decorator-based action declaration
 # ---------------------------------------------------------------------------
 
