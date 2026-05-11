@@ -201,9 +201,7 @@ class Tesseron:
             uds_transport = UdsTransport()
             await uds_transport.start()
             self._transport = uds_transport
-            transport_descriptor = UdsTransportType(
-                path=str(uds_transport.socket_path)
-            )
+            transport_descriptor = UdsTransportType(path=str(uds_transport.socket_path))
 
         # Write instance manifest
         self._manifest = DiscoveryManifest(
@@ -538,6 +536,7 @@ class Tesseron:
         async def run() -> None:
             try:
                 from python_tesseron.actions import _validate_input, _validate_output
+
                 validated_input = _validate_input(action_defn, invoke_params.input)
                 result = await action_defn.handler(validated_input, ctx)
                 if action_defn.strict_output and action_defn.output_model is not None:

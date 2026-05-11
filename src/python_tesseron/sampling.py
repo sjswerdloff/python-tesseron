@@ -127,21 +127,15 @@ def _parse_and_validate_sampling_content(
     try:
         parsed = json.loads(content)
     except json.JSONDecodeError as exc:
-        raise HandlerError(
-            f"Sampling response is not valid JSON: {exc}"
-        ) from exc
+        raise HandlerError(f"Sampling response is not valid JSON: {exc}") from exc
 
     # Basic structural validation using the schema
     # Full JSON Schema validation would require jsonschema library
     # but per spec we do minimal validation
     schema_type = json_schema.get("type")
     if schema_type == "object" and not isinstance(parsed, dict):
-        raise HandlerError(
-            f"Sampling response expected object, got {type(parsed).__name__}"
-        )
+        raise HandlerError(f"Sampling response expected object, got {type(parsed).__name__}")
     if schema_type == "array" and not isinstance(parsed, list):
-        raise HandlerError(
-            f"Sampling response expected array, got {type(parsed).__name__}"
-        )
+        raise HandlerError(f"Sampling response expected array, got {type(parsed).__name__}")
 
     return parsed

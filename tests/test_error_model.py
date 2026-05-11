@@ -242,15 +242,15 @@ async def test_er07_cancelled_returns_32001_to_handler(mock_gateway: MockGateway
     for _ in range(50):
         await asyncio.sleep(0.1)
         error_responses = [
-            m.parsed for m in mock_gateway.state.received
+            m.parsed
+            for m in mock_gateway.state.received
             if m.parsed and "error" in m.parsed and m.parsed.get("id") == invoke_id
         ]
         if error_responses:
             break
 
     error_responses = [
-        m.parsed for m in mock_gateway.state.received
-        if m.parsed and "error" in m.parsed and m.parsed.get("id") == invoke_id
+        m.parsed for m in mock_gateway.state.received if m.parsed and "error" in m.parsed and m.parsed.get("id") == invoke_id
     ]
     assert len(error_responses) == 1
     assert error_responses[0]["error"]["code"] == -32001
@@ -282,15 +282,15 @@ async def test_er08_timeout_returns_32002(mock_gateway: MockGateway) -> None:
     for _ in range(30):
         await asyncio.sleep(0.1)
         error_responses = [
-            m.parsed for m in mock_gateway.state.received
+            m.parsed
+            for m in mock_gateway.state.received
             if m.parsed and "error" in m.parsed and m.parsed.get("id") == invoke_id
         ]
         if error_responses:
             break
 
     error_responses = [
-        m.parsed for m in mock_gateway.state.received
-        if m.parsed and "error" in m.parsed and m.parsed.get("id") == invoke_id
+        m.parsed for m in mock_gateway.state.received if m.parsed and "error" in m.parsed and m.parsed.get("id") == invoke_id
     ]
     assert len(error_responses) == 1
     assert error_responses[0]["error"]["code"] == -32002
@@ -317,15 +317,15 @@ async def test_er09_action_not_found_returns_32003(mock_gateway: MockGateway) ->
     for _ in range(30):
         await asyncio.sleep(0.1)
         error_responses = [
-            m.parsed for m in mock_gateway.state.received
+            m.parsed
+            for m in mock_gateway.state.received
             if m.parsed and "error" in m.parsed and m.parsed.get("id") == invoke_id
         ]
         if error_responses:
             break
 
     error_responses = [
-        m.parsed for m in mock_gateway.state.received
-        if m.parsed and "error" in m.parsed and m.parsed.get("id") == invoke_id
+        m.parsed for m in mock_gateway.state.received if m.parsed and "error" in m.parsed and m.parsed.get("id") == invoke_id
     ]
     assert len(error_responses) == 1
     assert error_responses[0]["error"]["code"] == -32003
@@ -364,15 +364,15 @@ async def test_er10_input_validation_returns_32004_with_issues(mock_gateway: Moc
     for _ in range(30):
         await asyncio.sleep(0.1)
         error_responses = [
-            m.parsed for m in mock_gateway.state.received
+            m.parsed
+            for m in mock_gateway.state.received
             if m.parsed and "error" in m.parsed and m.parsed.get("id") == invoke_id
         ]
         if error_responses:
             break
 
     error_responses = [
-        m.parsed for m in mock_gateway.state.received
-        if m.parsed and "error" in m.parsed and m.parsed.get("id") == invoke_id
+        m.parsed for m in mock_gateway.state.received if m.parsed and "error" in m.parsed and m.parsed.get("id") == invoke_id
     ]
     assert len(error_responses) == 1
     assert error_responses[0]["error"]["code"] == -32004
@@ -403,15 +403,15 @@ async def test_er11_handler_exception_maps_to_32005(mock_gateway: MockGateway) -
     for _ in range(30):
         await asyncio.sleep(0.1)
         error_responses = [
-            m.parsed for m in mock_gateway.state.received
+            m.parsed
+            for m in mock_gateway.state.received
             if m.parsed and "error" in m.parsed and m.parsed.get("id") == invoke_id
         ]
         if error_responses:
             break
 
     error_responses = [
-        m.parsed for m in mock_gateway.state.received
-        if m.parsed and "error" in m.parsed and m.parsed.get("id") == invoke_id
+        m.parsed for m in mock_gateway.state.received if m.parsed and "error" in m.parsed and m.parsed.get("id") == invoke_id
     ]
     assert len(error_responses) == 1
     assert error_responses[0]["error"]["code"] == -32005
@@ -450,17 +450,15 @@ async def test_er12_strict_output_failure_maps_to_32005(mock_gateway: MockGatewa
         await asyncio.sleep(0.1)
         # Could be either error or success depending on pydantic coercion
         responses = [
-            m.parsed for m in mock_gateway.state.received
+            m.parsed
+            for m in mock_gateway.state.received
             if m.parsed and ("error" in m.parsed or "result" in m.parsed) and m.parsed.get("id") == invoke_id
         ]
         if responses:
             break
 
     # The action either returns -32005 (if pydantic rejects it) or succeeds (if pydantic coerces)
-    responses = [
-        m.parsed for m in mock_gateway.state.received
-        if m.parsed and m.parsed.get("id") == invoke_id
-    ]
+    responses = [m.parsed for m in mock_gateway.state.received if m.parsed and m.parsed.get("id") == invoke_id]
     assert len(responses) >= 1
 
     await tesseron.disconnect()
@@ -497,15 +495,15 @@ async def test_er13_sampling_not_available_when_capability_absent(mock_gateway: 
     for _ in range(30):
         await asyncio.sleep(0.1)
         error_responses = [
-            m.parsed for m in mock_gateway.state.received
+            m.parsed
+            for m in mock_gateway.state.received
             if m.parsed and "error" in m.parsed and m.parsed.get("id") == invoke_id
         ]
         if error_responses:
             break
 
     error_responses = [
-        m.parsed for m in mock_gateway.state.received
-        if m.parsed and "error" in m.parsed and m.parsed.get("id") == invoke_id
+        m.parsed for m in mock_gateway.state.received if m.parsed and "error" in m.parsed and m.parsed.get("id") == invoke_id
     ]
     assert len(error_responses) == 1
     # SamplingNotAvailableError propagates as -32006, or as HandlerError (-32005) wrapping it
@@ -543,15 +541,15 @@ async def test_er14_elicitation_not_available_when_capability_absent(mock_gatewa
     for _ in range(30):
         await asyncio.sleep(0.1)
         error_responses = [
-            m.parsed for m in mock_gateway.state.received
+            m.parsed
+            for m in mock_gateway.state.received
             if m.parsed and "error" in m.parsed and m.parsed.get("id") == invoke_id
         ]
         if error_responses:
             break
 
     error_responses = [
-        m.parsed for m in mock_gateway.state.received
-        if m.parsed and "error" in m.parsed and m.parsed.get("id") == invoke_id
+        m.parsed for m in mock_gateway.state.received if m.parsed and "error" in m.parsed and m.parsed.get("id") == invoke_id
     ]
     assert len(error_responses) == 1
     # ElicitationNotAvailableError (-32007) or HandlerError (-32005) wrapping it
@@ -662,6 +660,7 @@ async def test_er18_resume_failed_returns_32011(mock_gateway: MockGateway) -> No
 
     # Set up resume credentials so SDK sends tesseron/resume first
     from python_tesseron.resume import ResumeCredentials
+
     creds = ResumeCredentials(session_id="old_session", resume_token="expired_token")
 
     async def handle_resume_with_failure() -> None:
@@ -758,15 +757,15 @@ async def test_er20_non_tesseron_error_maps_to_32005(mock_gateway: MockGateway) 
     for _ in range(30):
         await asyncio.sleep(0.1)
         error_responses = [
-            m.parsed for m in mock_gateway.state.received
+            m.parsed
+            for m in mock_gateway.state.received
             if m.parsed and "error" in m.parsed and m.parsed.get("id") == invoke_id
         ]
         if error_responses:
             break
 
     error_responses = [
-        m.parsed for m in mock_gateway.state.received
-        if m.parsed and "error" in m.parsed and m.parsed.get("id") == invoke_id
+        m.parsed for m in mock_gateway.state.received if m.parsed and "error" in m.parsed and m.parsed.get("id") == invoke_id
     ]
     assert len(error_responses) == 1
     assert error_responses[0]["error"]["code"] == -32005
@@ -903,15 +902,15 @@ async def test_er27_confirm_returns_false_when_elicitation_not_available(mock_ga
     for _ in range(30):
         await asyncio.sleep(0.1)
         responses = [
-            m.parsed for m in mock_gateway.state.received
+            m.parsed
+            for m in mock_gateway.state.received
             if m.parsed and ("result" in m.parsed or "error" in m.parsed) and m.parsed.get("id") == invoke_id
         ]
         if responses:
             break
 
     success_responses = [
-        m.parsed for m in mock_gateway.state.received
-        if m.parsed and "result" in m.parsed and m.parsed.get("id") == invoke_id
+        m.parsed for m in mock_gateway.state.received if m.parsed and "result" in m.parsed and m.parsed.get("id") == invoke_id
     ]
     # Must succeed (not raise), and confirm must return False
     assert len(success_responses) == 1
@@ -951,15 +950,15 @@ async def test_er28_elicit_throws_when_elicitation_not_available(mock_gateway: M
     for _ in range(30):
         await asyncio.sleep(0.1)
         error_responses = [
-            m.parsed for m in mock_gateway.state.received
+            m.parsed
+            for m in mock_gateway.state.received
             if m.parsed and "error" in m.parsed and m.parsed.get("id") == invoke_id
         ]
         if error_responses:
             break
 
     error_responses = [
-        m.parsed for m in mock_gateway.state.received
-        if m.parsed and "error" in m.parsed and m.parsed.get("id") == invoke_id
+        m.parsed for m in mock_gateway.state.received if m.parsed and "error" in m.parsed and m.parsed.get("id") == invoke_id
     ]
     # Must produce an error response (elicit raises, not returns False)
     assert len(error_responses) == 1

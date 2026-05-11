@@ -202,17 +202,12 @@ def validate_elicitation_schema(schema: dict[str, Any]) -> None:
     """
     # REQ-061: top level must be object type
     if schema.get("type") != "object":
-        raise InvalidParamsError(
-            "Elicitation schema top level must be {\"type\": \"object\"}. "
-            f"Got type={schema.get('type')!r}"
-        )
+        raise InvalidParamsError(f'Elicitation schema top level must be {{"type": "object"}}. Got type={schema.get("type")!r}')
 
     # REQ-063: no combinators at top level
     for combinator in _FORBIDDEN_COMBINATORS:
         if combinator in schema:
-            raise InvalidParamsError(
-                f"Elicitation schema must not use combinator {combinator!r} at the top level."
-            )
+            raise InvalidParamsError(f"Elicitation schema must not use combinator {combinator!r} at the top level.")
 
     # REQ-062: each property must be a primitive type
     properties = schema.get("properties", {})

@@ -168,10 +168,7 @@ async def test_wf06_sdk_uses_monotonically_incrementing_ids(mock_gateway: MockGa
     assert hello_params is not None
 
     # Find the hello request to get its id
-    hello_msg = next(
-        m.parsed for m in mock_gateway.state.received
-        if m.parsed and m.parsed.get("method") == "tesseron/hello"
-    )
+    hello_msg = next(m.parsed for m in mock_gateway.state.received if m.parsed and m.parsed.get("method") == "tesseron/hello")
     hello_id = hello_msg["id"]
     assert isinstance(hello_id, int)
 
@@ -200,10 +197,7 @@ async def test_wf07_responding_peer_echoes_request_id(mock_gateway: MockGateway)
 
     # Wait for hello, then send welcome with the exact same id
     await mock_gateway.wait_for_hello(timeout=5.0)
-    hello_msg = next(
-        m.parsed for m in mock_gateway.state.received
-        if m.parsed and m.parsed.get("method") == "tesseron/hello"
-    )
+    hello_msg = next(m.parsed for m in mock_gateway.state.received if m.parsed and m.parsed.get("method") == "tesseron/hello")
     hello_id = hello_msg["id"]
 
     # Send welcome echoing the exact id
@@ -420,10 +414,7 @@ async def test_wf17_gateway_sends_tesseron_gateway_subprotocol(mock_gateway: Moc
     connect_task = asyncio.create_task(tesseron.connect_as_client(mock_gateway.url))
 
     await mock_gateway.wait_for_hello(timeout=5.0)
-    hello_msg = next(
-        m.parsed for m in mock_gateway.state.received
-        if m.parsed and m.parsed.get("method") == "tesseron/hello"
-    )
+    hello_msg = next(m.parsed for m in mock_gateway.state.received if m.parsed and m.parsed.get("method") == "tesseron/hello")
     await mock_gateway.send_welcome(request_id=hello_msg["id"])
     welcome = await connect_task
 

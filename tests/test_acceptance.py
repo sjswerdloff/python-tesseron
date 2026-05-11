@@ -159,15 +159,15 @@ async def test_at02_action_invocation_with_valid_input(mock_gateway: MockGateway
     for _ in range(30):
         await asyncio.sleep(0.1)
         success_responses = [
-            m.parsed for m in mock_gateway.state.received
+            m.parsed
+            for m in mock_gateway.state.received
             if m.parsed and "result" in m.parsed and m.parsed.get("id") == invoke_id
         ]
         if success_responses:
             break
 
     success_responses = [
-        m.parsed for m in mock_gateway.state.received
-        if m.parsed and "result" in m.parsed and m.parsed.get("id") == invoke_id
+        m.parsed for m in mock_gateway.state.received if m.parsed and "result" in m.parsed and m.parsed.get("id") == invoke_id
     ]
     assert len(success_responses) == 1
 
@@ -226,15 +226,15 @@ async def test_at03_input_validation_failure(mock_gateway: MockGateway) -> None:
     for _ in range(30):
         await asyncio.sleep(0.1)
         error_responses = [
-            m.parsed for m in mock_gateway.state.received
+            m.parsed
+            for m in mock_gateway.state.received
             if m.parsed and "error" in m.parsed and m.parsed.get("id") == invoke_id
         ]
         if error_responses:
             break
 
     error_responses = [
-        m.parsed for m in mock_gateway.state.received
-        if m.parsed and "error" in m.parsed and m.parsed.get("id") == invoke_id
+        m.parsed for m in mock_gateway.state.received if m.parsed and "error" in m.parsed and m.parsed.get("id") == invoke_id
     ]
     assert len(error_responses) == 1
     assert error_responses[0]["error"]["code"] == -32004  # REQ-045
@@ -283,7 +283,8 @@ async def test_at04_long_running_action_with_progress(mock_gateway: MockGateway)
     for _ in range(50):
         await asyncio.sleep(0.1)
         success_responses = [
-            m.parsed for m in mock_gateway.state.received
+            m.parsed
+            for m in mock_gateway.state.received
             if m.parsed and "result" in m.parsed and m.parsed.get("id") == invoke_id
         ]
         if success_responses:
@@ -291,15 +292,13 @@ async def test_at04_long_running_action_with_progress(mock_gateway: MockGateway)
 
     # Verify success
     success_responses = [
-        m.parsed for m in mock_gateway.state.received
-        if m.parsed and "result" in m.parsed and m.parsed.get("id") == invoke_id
+        m.parsed for m in mock_gateway.state.received if m.parsed and "result" in m.parsed and m.parsed.get("id") == invoke_id
     ]
     assert len(success_responses) == 1
 
     # Verify progress notifications were sent
     progress_notifications = [
-        m.parsed for m in mock_gateway.state.received
-        if m.parsed and m.parsed.get("method") == "actions/progress"
+        m.parsed for m in mock_gateway.state.received if m.parsed and m.parsed.get("method") == "actions/progress"
     ]
     assert len(progress_notifications) == 3
 
@@ -354,39 +353,39 @@ async def test_at05_action_confirmation(mock_gateway: MockGateway) -> None:
     for _ in range(30):
         await asyncio.sleep(0.1)
         elicit_requests = [
-            m.parsed for m in mock_gateway.state.received
-            if m.parsed and m.parsed.get("method") == "elicitation/request"
+            m.parsed for m in mock_gateway.state.received if m.parsed and m.parsed.get("method") == "elicitation/request"
         ]
         if elicit_requests:
             break
 
     elicit_requests = [
-        m.parsed for m in mock_gateway.state.received
-        if m.parsed and m.parsed.get("method") == "elicitation/request"
+        m.parsed for m in mock_gateway.state.received if m.parsed and m.parsed.get("method") == "elicitation/request"
     ]
     assert len(elicit_requests) >= 1
 
     # User accepts: respond with action=accept
     elicit_req = elicit_requests[0]
-    await mock_gateway.send({
-        "jsonrpc": "2.0",
-        "id": elicit_req["id"],
-        "result": {"action": "accept", "value": {}},
-    })
+    await mock_gateway.send(
+        {
+            "jsonrpc": "2.0",
+            "id": elicit_req["id"],
+            "result": {"action": "accept", "value": {}},
+        }
+    )
 
     # Wait for invocation result
     for _ in range(30):
         await asyncio.sleep(0.1)
         success_responses = [
-            m.parsed for m in mock_gateway.state.received
+            m.parsed
+            for m in mock_gateway.state.received
             if m.parsed and "result" in m.parsed and m.parsed.get("id") == invoke_id
         ]
         if success_responses:
             break
 
     success_responses = [
-        m.parsed for m in mock_gateway.state.received
-        if m.parsed and "result" in m.parsed and m.parsed.get("id") == invoke_id
+        m.parsed for m in mock_gateway.state.received if m.parsed and "result" in m.parsed and m.parsed.get("id") == invoke_id
     ]
     assert len(success_responses) == 1
     assert confirm_result and confirm_result[0] is True
@@ -440,31 +439,32 @@ async def test_at06_sampling(mock_gateway: MockGateway) -> None:
     for _ in range(30):
         await asyncio.sleep(0.1)
         sampling_requests = [
-            m.parsed for m in mock_gateway.state.received
-            if m.parsed and m.parsed.get("method") == "sampling/request"
+            m.parsed for m in mock_gateway.state.received if m.parsed and m.parsed.get("method") == "sampling/request"
         ]
         if sampling_requests:
             break
 
     sampling_requests = [
-        m.parsed for m in mock_gateway.state.received
-        if m.parsed and m.parsed.get("method") == "sampling/request"
+        m.parsed for m in mock_gateway.state.received if m.parsed and m.parsed.get("method") == "sampling/request"
     ]
     assert len(sampling_requests) >= 1
 
     # Respond with a sampling result
     sample_req = sampling_requests[0]
-    await mock_gateway.send({
-        "jsonrpc": "2.0",
-        "id": sample_req["id"],
-        "result": {"content": "4"},
-    })
+    await mock_gateway.send(
+        {
+            "jsonrpc": "2.0",
+            "id": sample_req["id"],
+            "result": {"content": "4"},
+        }
+    )
 
     # Wait for invocation result
     for _ in range(30):
         await asyncio.sleep(0.1)
         success_responses = [
-            m.parsed for m in mock_gateway.state.received
+            m.parsed
+            for m in mock_gateway.state.received
             if m.parsed and ("result" in m.parsed or "error" in m.parsed) and m.parsed.get("id") == invoke_id
         ]
         if success_responses:
@@ -583,15 +583,13 @@ async def test_at08_dynamic_action_registration(mock_gateway: MockGateway) -> No
     for _ in range(30):
         await asyncio.sleep(0.1)
         list_changed = [
-            m.parsed for m in mock_gateway.state.received
-            if m.parsed and m.parsed.get("method") == "actions/list_changed"
+            m.parsed for m in mock_gateway.state.received if m.parsed and m.parsed.get("method") == "actions/list_changed"
         ]
         if list_changed:
             break
 
     list_changed = [
-        m.parsed for m in mock_gateway.state.received
-        if m.parsed and m.parsed.get("method") == "actions/list_changed"
+        m.parsed for m in mock_gateway.state.received if m.parsed and m.parsed.get("method") == "actions/list_changed"
     ]
     assert len(list_changed) >= 1
     # Verify all 3 actions are in the notification
@@ -605,15 +603,13 @@ async def test_at08_dynamic_action_registration(mock_gateway: MockGateway) -> No
     for _ in range(30):
         await asyncio.sleep(0.1)
         list_changed = [
-            m.parsed for m in mock_gateway.state.received
-            if m.parsed and m.parsed.get("method") == "actions/list_changed"
+            m.parsed for m in mock_gateway.state.received if m.parsed and m.parsed.get("method") == "actions/list_changed"
         ]
         if len(list_changed) > initial_count:
             break
 
     list_changed = [
-        m.parsed for m in mock_gateway.state.received
-        if m.parsed and m.parsed.get("method") == "actions/list_changed"
+        m.parsed for m in mock_gateway.state.received if m.parsed and m.parsed.get("method") == "actions/list_changed"
     ]
     assert len(list_changed) > initial_count
     action_names_after = [a["name"] for a in list_changed[-1]["params"]["actions"]]
@@ -673,7 +669,8 @@ async def test_at09_resource_subscription(mock_gateway: MockGateway) -> None:
     for _ in range(30):
         await asyncio.sleep(0.1)
         responses = [
-            m.parsed for m in mock_gateway.state.received
+            m.parsed
+            for m in mock_gateway.state.received
             if m.parsed and "result" in m.parsed and m.parsed.get("id") == sub_req_id
         ]
         if responses:
@@ -681,8 +678,7 @@ async def test_at09_resource_subscription(mock_gateway: MockGateway) -> None:
 
     # Verify resource read worked
     responses = [
-        m.parsed for m in mock_gateway.state.received
-        if m.parsed and "result" in m.parsed and m.parsed.get("id") == sub_req_id
+        m.parsed for m in mock_gateway.state.received if m.parsed and "result" in m.parsed and m.parsed.get("id") == sub_req_id
     ]
     assert len(responses) >= 1
 
@@ -792,15 +788,13 @@ async def test_at11_elicitation(mock_gateway: MockGateway) -> None:
     for _ in range(30):
         await asyncio.sleep(0.1)
         elicit_requests = [
-            m.parsed for m in mock_gateway.state.received
-            if m.parsed and m.parsed.get("method") == "elicitation/request"
+            m.parsed for m in mock_gateway.state.received if m.parsed and m.parsed.get("method") == "elicitation/request"
         ]
         if elicit_requests:
             break
 
     elicit_requests = [
-        m.parsed for m in mock_gateway.state.received
-        if m.parsed and m.parsed.get("method") == "elicitation/request"
+        m.parsed for m in mock_gateway.state.received if m.parsed and m.parsed.get("method") == "elicitation/request"
     ]
     assert len(elicit_requests) >= 1
 
@@ -809,24 +803,26 @@ async def test_at11_elicitation(mock_gateway: MockGateway) -> None:
     assert "schema" in elicit_req.get("params", {})
 
     # User accepts
-    await mock_gateway.send({
-        "jsonrpc": "2.0",
-        "id": elicit_req["id"],
-        "result": {"action": "accept", "value": {"warehouseId": "WH-001"}},
-    })
+    await mock_gateway.send(
+        {
+            "jsonrpc": "2.0",
+            "id": elicit_req["id"],
+            "result": {"action": "accept", "value": {"warehouseId": "WH-001"}},
+        }
+    )
 
     for _ in range(30):
         await asyncio.sleep(0.1)
         success_responses = [
-            m.parsed for m in mock_gateway.state.received
+            m.parsed
+            for m in mock_gateway.state.received
             if m.parsed and ("result" in m.parsed or "error" in m.parsed) and m.parsed.get("id") == invoke_id
         ]
         if success_responses:
             break
 
     success_responses = [
-        m.parsed for m in mock_gateway.state.received
-        if m.parsed and "result" in m.parsed and m.parsed.get("id") == invoke_id
+        m.parsed for m in mock_gateway.state.received if m.parsed and "result" in m.parsed and m.parsed.get("id") == invoke_id
     ]
     assert len(success_responses) == 1
 
@@ -877,15 +873,15 @@ async def test_at12_capability_gating(mock_gateway: MockGateway) -> None:
     for _ in range(30):
         await asyncio.sleep(0.1)
         success_responses = [
-            m.parsed for m in mock_gateway.state.received
+            m.parsed
+            for m in mock_gateway.state.received
             if m.parsed and "result" in m.parsed and m.parsed.get("id") == invoke_id
         ]
         if success_responses:
             break
 
     success_responses = [
-        m.parsed for m in mock_gateway.state.received
-        if m.parsed and "result" in m.parsed and m.parsed.get("id") == invoke_id
+        m.parsed for m in mock_gateway.state.received if m.parsed and "result" in m.parsed and m.parsed.get("id") == invoke_id
     ]
     assert len(success_responses) == 1
     # REQ-074: fallback path taken when sampling not available
@@ -947,33 +943,27 @@ async def test_at13_session_resume(mock_gateway: MockGateway) -> None:
         wait_task = asyncio.create_task(wait_for_resume())
 
         tesseron2 = Tesseron(app={"id": "resume_app", "name": "Resume"})
-        connect2_task = asyncio.create_task(
-            tesseron2.connect_as_client(gw2.url, resume=creds)
-        )
+        connect2_task = asyncio.create_task(tesseron2.connect_as_client(gw2.url, resume=creds))
 
         # Handle tesseron/resume
         for _ in range(50):
             await asyncio.sleep(0.1)
-            resume_msgs = [
-                m for m in gw2.state.received
-                if m.parsed and m.parsed.get("method") == "tesseron/resume"
-            ]
+            resume_msgs = [m for m in gw2.state.received if m.parsed and m.parsed.get("method") == "tesseron/resume"]
             if resume_msgs:
                 break
 
-        resume_msgs = [
-            m for m in gw2.state.received
-            if m.parsed and m.parsed.get("method") == "tesseron/resume"
-        ]
+        resume_msgs = [m for m in gw2.state.received if m.parsed and m.parsed.get("method") == "tesseron/resume"]
         if resume_msgs:
             # REQ-038: SDK sends tesseron/resume instead of hello
             resume_req = resume_msgs[0].parsed
             assert resume_req is not None
-            await gw2.send({
-                "jsonrpc": "2.0",
-                "id": resume_req["id"],
-                "result": make_welcome_result(session_id="s_resumed", include_resume_token=True),
-            })
+            await gw2.send(
+                {
+                    "jsonrpc": "2.0",
+                    "id": resume_req["id"],
+                    "result": make_welcome_result(session_id="s_resumed", include_resume_token=True),
+                }
+            )
             await connect2_task
             # REQ-039: new resumeToken stored
             assert tesseron2._resume_manager.has_credentials
@@ -1086,15 +1076,15 @@ async def test_at15_action_timeout(mock_gateway: MockGateway) -> None:
     for _ in range(50):
         await asyncio.sleep(0.1)
         error_responses = [
-            m.parsed for m in mock_gateway.state.received
+            m.parsed
+            for m in mock_gateway.state.received
             if m.parsed and "error" in m.parsed and m.parsed.get("id") == invoke_id
         ]
         if error_responses:
             break
 
     error_responses = [
-        m.parsed for m in mock_gateway.state.received
-        if m.parsed and "error" in m.parsed and m.parsed.get("id") == invoke_id
+        m.parsed for m in mock_gateway.state.received if m.parsed and "error" in m.parsed and m.parsed.get("id") == invoke_id
     ]
     assert len(error_responses) == 1
     assert error_responses[0]["error"]["code"] == -32002  # REQ-056
@@ -1142,15 +1132,15 @@ async def test_at16_handler_error_propagation(mock_gateway: MockGateway) -> None
     for _ in range(30):
         await asyncio.sleep(0.1)
         err_a = [
-            m.parsed for m in mock_gateway.state.received
+            m.parsed
+            for m in mock_gateway.state.received
             if m.parsed and "error" in m.parsed and m.parsed.get("id") == invoke_id_a
         ]
         if err_a:
             break
 
     err_a = [
-        m.parsed for m in mock_gateway.state.received
-        if m.parsed and "error" in m.parsed and m.parsed.get("id") == invoke_id_a
+        m.parsed for m in mock_gateway.state.received if m.parsed and "error" in m.parsed and m.parsed.get("id") == invoke_id_a
     ]
     assert len(err_a) == 1
     assert err_a[0]["error"]["code"] == -32005  # REQ-079
@@ -1161,15 +1151,15 @@ async def test_at16_handler_error_propagation(mock_gateway: MockGateway) -> None
     for _ in range(30):
         await asyncio.sleep(0.1)
         err_b = [
-            m.parsed for m in mock_gateway.state.received
+            m.parsed
+            for m in mock_gateway.state.received
             if m.parsed and "error" in m.parsed and m.parsed.get("id") == invoke_id_b
         ]
         if err_b:
             break
 
     err_b = [
-        m.parsed for m in mock_gateway.state.received
-        if m.parsed and "error" in m.parsed and m.parsed.get("id") == invoke_id_b
+        m.parsed for m in mock_gateway.state.received if m.parsed and "error" in m.parsed and m.parsed.get("id") == invoke_id_b
     ]
     assert len(err_b) == 1
     assert err_b[0]["error"]["code"] == -32003  # REQ-078
@@ -1218,17 +1208,15 @@ async def test_at17_strict_output_validation(mock_gateway: MockGateway) -> None:
     for _ in range(30):
         await asyncio.sleep(0.1)
         responses = [
-            m.parsed for m in mock_gateway.state.received
+            m.parsed
+            for m in mock_gateway.state.received
             if m.parsed and m.parsed.get("id") == invoke_id and ("error" in m.parsed or "result" in m.parsed)
         ]
         if responses:
             break
 
     # Either strict validation fails (-32005) or pydantic coerces the string to float
-    responses = [
-        m.parsed for m in mock_gateway.state.received
-        if m.parsed and m.parsed.get("id") == invoke_id
-    ]
+    responses = [m.parsed for m in mock_gateway.state.received if m.parsed and m.parsed.get("id") == invoke_id]
     assert len(responses) >= 1
 
     await tesseron.disconnect()
@@ -1267,23 +1255,20 @@ async def test_at18_structured_logging(mock_gateway: MockGateway) -> None:
     for _ in range(30):
         await asyncio.sleep(0.1)
         success_responses = [
-            m.parsed for m in mock_gateway.state.received
+            m.parsed
+            for m in mock_gateway.state.received
             if m.parsed and "result" in m.parsed and m.parsed.get("id") == invoke_id
         ]
         if success_responses:
             break
 
     success_responses = [
-        m.parsed for m in mock_gateway.state.received
-        if m.parsed and "result" in m.parsed and m.parsed.get("id") == invoke_id
+        m.parsed for m in mock_gateway.state.received if m.parsed and "result" in m.parsed and m.parsed.get("id") == invoke_id
     ]
     assert len(success_responses) == 1
 
     # Verify log notification was sent (ctx.log uses "log" method name)
-    log_notifications = [
-        m.parsed for m in mock_gateway.state.received
-        if m.parsed and m.parsed.get("method") == "log"
-    ]
+    log_notifications = [m.parsed for m in mock_gateway.state.received if m.parsed and m.parsed.get("method") == "log"]
     assert len(log_notifications) >= 1
     log_params = log_notifications[0]["params"]
     assert log_params.get("level") == "info"
@@ -1341,15 +1326,15 @@ async def test_at19_claimed_notification_updates_capabilities(mock_gateway: Mock
     for _ in range(30):
         await asyncio.sleep(0.1)
         success_responses = [
-            m.parsed for m in mock_gateway.state.received
+            m.parsed
+            for m in mock_gateway.state.received
             if m.parsed and "result" in m.parsed and m.parsed.get("id") == invoke_id
         ]
         if success_responses:
             break
 
     success_responses = [
-        m.parsed for m in mock_gateway.state.received
-        if m.parsed and "result" in m.parsed and m.parsed.get("id") == invoke_id
+        m.parsed for m in mock_gateway.state.received if m.parsed and "result" in m.parsed and m.parsed.get("id") == invoke_id
     ]
     assert len(success_responses) == 1
 
@@ -1418,22 +1403,26 @@ async def test_at20_concurrent_invocations(mock_gateway: MockGateway) -> None:
     for _ in range(30):
         await asyncio.sleep(0.1)
         success_a = [
-            m.parsed for m in mock_gateway.state.received
+            m.parsed
+            for m in mock_gateway.state.received
             if m.parsed and "result" in m.parsed and m.parsed.get("id") == invoke_id_a
         ]
         success_b = [
-            m.parsed for m in mock_gateway.state.received
+            m.parsed
+            for m in mock_gateway.state.received
             if m.parsed and "result" in m.parsed and m.parsed.get("id") == invoke_id_b
         ]
         if success_a and success_b:
             break
 
     success_a = [
-        m.parsed for m in mock_gateway.state.received
+        m.parsed
+        for m in mock_gateway.state.received
         if m.parsed and "result" in m.parsed and m.parsed.get("id") == invoke_id_a
     ]
     success_b = [
-        m.parsed for m in mock_gateway.state.received
+        m.parsed
+        for m in mock_gateway.state.received
         if m.parsed and "result" in m.parsed and m.parsed.get("id") == invoke_id_b
     ]
 

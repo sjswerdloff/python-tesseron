@@ -65,10 +65,7 @@ def validate_app_id(app_id: str) -> None:
             "Must start with a lowercase letter and contain only lowercase letters, digits, and underscores."
         )
     if app_id in _RESERVED_APP_IDS:
-        raise UnauthorizedError(
-            f"app.id {app_id!r} is reserved. "
-            f"Reserved IDs: {sorted(_RESERVED_APP_IDS)}"
-        )
+        raise UnauthorizedError(f"app.id {app_id!r} is reserved. Reserved IDs: {sorted(_RESERVED_APP_IDS)}")
 
 
 class HandshakeManager:

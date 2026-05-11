@@ -89,10 +89,7 @@ async def test_cp03_handler_trusts_intersection_not_app_capabilities(mock_gatewa
 
     connect_task = asyncio.create_task(tesseron.connect_as_client(mock_gateway.url))
     await mock_gateway.wait_for_hello(timeout=5.0)
-    hello_msg = next(
-        m.parsed for m in mock_gateway.state.received
-        if m.parsed and m.parsed.get("method") == "tesseron/hello"
-    )
+    hello_msg = next(m.parsed for m in mock_gateway.state.received if m.parsed and m.parsed.get("method") == "tesseron/hello")
     # Gateway returns intersection: sampling=False
     await mock_gateway.send_welcome(
         request_id=hello_msg["id"],
@@ -159,10 +156,7 @@ async def test_cp05_claimed_notification_updates_agent_capabilities(mock_gateway
 
     connect_task = asyncio.create_task(tesseron.connect_as_client(mock_gateway.url))
     await mock_gateway.wait_for_hello(timeout=5.0)
-    hello_msg = next(
-        m.parsed for m in mock_gateway.state.received
-        if m.parsed and m.parsed.get("method") == "tesseron/hello"
-    )
+    hello_msg = next(m.parsed for m in mock_gateway.state.received if m.parsed and m.parsed.get("method") == "tesseron/hello")
     # Welcome with sampling=False
     await mock_gateway.send_welcome(
         request_id=hello_msg["id"],
@@ -203,10 +197,7 @@ async def test_cp06_handlers_after_claimed_see_updated_capabilities(mock_gateway
 
     connect_task = asyncio.create_task(tesseron.connect_as_client(mock_gateway.url))
     await mock_gateway.wait_for_hello(timeout=5.0)
-    hello_msg = next(
-        m.parsed for m in mock_gateway.state.received
-        if m.parsed and m.parsed.get("method") == "tesseron/hello"
-    )
+    hello_msg = next(m.parsed for m in mock_gateway.state.received if m.parsed and m.parsed.get("method") == "tesseron/hello")
     await mock_gateway.send_welcome(
         request_id=hello_msg["id"],
         capabilities={"streaming": True, "subscriptions": True, "sampling": False, "elicitation": True},
@@ -241,10 +232,7 @@ async def test_cp07_capabilities_before_claimed_reflect_welcome_values(mock_gate
 
     connect_task = asyncio.create_task(tesseron.connect_as_client(mock_gateway.url))
     await mock_gateway.wait_for_hello(timeout=5.0)
-    hello_msg = next(
-        m.parsed for m in mock_gateway.state.received
-        if m.parsed and m.parsed.get("method") == "tesseron/hello"
-    )
+    hello_msg = next(m.parsed for m in mock_gateway.state.received if m.parsed and m.parsed.get("method") == "tesseron/hello")
     await mock_gateway.send_welcome(
         request_id=hello_msg["id"],
         capabilities={"streaming": True, "subscriptions": True, "sampling": False, "elicitation": True},
@@ -284,10 +272,7 @@ async def test_cp08_sampling_capability_queryable_before_calling_sample(mock_gat
 
     connect_task = asyncio.create_task(tesseron.connect_as_client(mock_gateway.url))
     await mock_gateway.wait_for_hello(timeout=5.0)
-    hello_msg = next(
-        m.parsed for m in mock_gateway.state.received
-        if m.parsed and m.parsed.get("method") == "tesseron/hello"
-    )
+    hello_msg = next(m.parsed for m in mock_gateway.state.received if m.parsed and m.parsed.get("method") == "tesseron/hello")
     # sampling=False in intersection
     await mock_gateway.send_welcome(
         request_id=hello_msg["id"],
@@ -325,10 +310,7 @@ async def test_cp09_elicitation_capability_queryable_before_calling_elicit(mock_
 
     connect_task = asyncio.create_task(tesseron.connect_as_client(mock_gateway.url))
     await mock_gateway.wait_for_hello(timeout=5.0)
-    hello_msg = next(
-        m.parsed for m in mock_gateway.state.received
-        if m.parsed and m.parsed.get("method") == "tesseron/hello"
-    )
+    hello_msg = next(m.parsed for m in mock_gateway.state.received if m.parsed and m.parsed.get("method") == "tesseron/hello")
     # elicitation=True in DEFAULT_GATEWAY_CAPABILITIES
     await mock_gateway.send_welcome(
         request_id=hello_msg["id"],
@@ -369,10 +351,7 @@ async def test_cp10_fallback_path_works_when_capability_absent(mock_gateway: Moc
 
     connect_task = asyncio.create_task(tesseron.connect_as_client(mock_gateway.url))
     await mock_gateway.wait_for_hello(timeout=5.0)
-    hello_msg = next(
-        m.parsed for m in mock_gateway.state.received
-        if m.parsed and m.parsed.get("method") == "tesseron/hello"
-    )
+    hello_msg = next(m.parsed for m in mock_gateway.state.received if m.parsed and m.parsed.get("method") == "tesseron/hello")
     await mock_gateway.send_welcome(
         request_id=hello_msg["id"],
         capabilities=DEFAULT_GATEWAY_CAPABILITIES,  # sampling=False
@@ -413,10 +392,7 @@ async def test_cp11_happy_path_works_when_capability_present(mock_gateway: MockG
 
     connect_task = asyncio.create_task(tesseron.connect_as_client(mock_gateway.url))
     await mock_gateway.wait_for_hello(timeout=5.0)
-    hello_msg = next(
-        m.parsed for m in mock_gateway.state.received
-        if m.parsed and m.parsed.get("method") == "tesseron/hello"
-    )
+    hello_msg = next(m.parsed for m in mock_gateway.state.received if m.parsed and m.parsed.get("method") == "tesseron/hello")
     # Enable sampling
     await mock_gateway.send_welcome(
         request_id=hello_msg["id"],
@@ -436,8 +412,7 @@ async def test_cp11_happy_path_works_when_capability_present(mock_gateway: MockG
 
     # Find the sampling request
     sampling_requests = [
-        m.parsed for m in mock_gateway.state.received
-        if m.parsed and m.parsed.get("method") == "sampling/request"
+        m.parsed for m in mock_gateway.state.received if m.parsed and m.parsed.get("method") == "sampling/request"
     ]
     assert len(sampling_requests) >= 1, "SDK should send sampling/request"
 
@@ -505,6 +480,7 @@ async def test_cp13_exceeding_max_sampling_depth_returns_32008(mock_gateway: Moc
     await dispatcher.receive(error_response)
 
     from python_tesseron.errors import TesseronError
+
     with pytest.raises(TesseronError) as exc_info:
         await task
 
@@ -533,14 +509,13 @@ async def test_cp14_elicit_without_schema_uses_permissive_fallback(mock_gateway:
         sent.append(msg)
 
     from python_tesseron.dispatcher import JsonRpcDispatcher
+
     dispatcher = JsonRpcDispatcher(send=capture_send)
     caps = TesseronCapabilities(elicitation=True)
     bridge = ElicitationBridge(dispatcher=dispatcher, capabilities=caps)
 
     # Start elicit without explicit schema — uses permissive fallback
-    elicit_task = asyncio.create_task(
-        bridge.elicit(invocation_id="inv_001", question="Your response?")
-    )
+    elicit_task = asyncio.create_task(bridge.elicit(invocation_id="inv_001", question="Your response?"))
 
     await asyncio.sleep(0.05)
 
@@ -557,11 +532,13 @@ async def test_cp14_elicit_without_schema_uses_permissive_fallback(mock_gateway:
 
     # Respond to complete the task (ElicitationResult requires action field)
     req_id = req["id"]
-    await dispatcher.receive({
-        "jsonrpc": "2.0",
-        "id": req_id,
-        "result": {"action": "accept", "value": {"response": "ok"}},
-    })
+    await dispatcher.receive(
+        {
+            "jsonrpc": "2.0",
+            "id": req_id,
+            "result": {"action": "accept", "value": {"response": "ok"}},
+        }
+    )
     await elicit_task
 
 

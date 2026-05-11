@@ -304,16 +304,14 @@ async def test_sec06_requires_confirmation_action_rejects_uninvited_invocation(m
     for _ in range(30):
         await asyncio.sleep(0.1)
         responses = [
-            m.parsed for m in mock_gateway.state.received
+            m.parsed
+            for m in mock_gateway.state.received
             if m.parsed and ("result" in m.parsed or "error" in m.parsed) and m.parsed.get("id") == invoke_id
         ]
         if responses:
             break
 
-    responses = [
-        m.parsed for m in mock_gateway.state.received
-        if m.parsed and m.parsed.get("id") == invoke_id
-    ]
+    responses = [m.parsed for m in mock_gateway.state.received if m.parsed and m.parsed.get("id") == invoke_id]
     # Either the action runs (result) or is rejected (error) — either is valid
     # The annotation is recorded and accessible
     assert len(responses) >= 1

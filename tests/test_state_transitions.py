@@ -64,10 +64,7 @@ async def test_st01_disconnected_to_handshaking_on_open(mock_gateway: MockGatewa
     assert first_msg["method"] == "tesseron/hello"
 
     # Complete the handshake
-    hello_msg = next(
-        m.parsed for m in mock_gateway.state.received
-        if m.parsed and m.parsed.get("method") == "tesseron/hello"
-    )
+    hello_msg = next(m.parsed for m in mock_gateway.state.received if m.parsed and m.parsed.get("method") == "tesseron/hello")
     await mock_gateway.send_welcome(request_id=hello_msg["id"])
     await connect_task
 
@@ -86,10 +83,7 @@ async def test_st02_handshaking_to_awaiting_claim_on_welcome(mock_gateway: MockG
     connect_task = asyncio.create_task(tesseron.connect_as_client(mock_gateway.url))
 
     await mock_gateway.wait_for_hello(timeout=5.0)
-    hello_msg = next(
-        m.parsed for m in mock_gateway.state.received
-        if m.parsed and m.parsed.get("method") == "tesseron/hello"
-    )
+    hello_msg = next(m.parsed for m in mock_gateway.state.received if m.parsed and m.parsed.get("method") == "tesseron/hello")
     await mock_gateway.send_welcome(request_id=hello_msg["id"], session_id=DEFAULT_SESSION_ID)
     welcome = await connect_task
 
@@ -114,10 +108,7 @@ async def test_st03_awaiting_claim_to_claimed_on_claim(mock_gateway: MockGateway
     connect_task = asyncio.create_task(tesseron.connect_as_client(mock_gateway.url))
 
     await mock_gateway.wait_for_hello(timeout=5.0)
-    hello_msg = next(
-        m.parsed for m in mock_gateway.state.received
-        if m.parsed and m.parsed.get("method") == "tesseron/hello"
-    )
+    hello_msg = next(m.parsed for m in mock_gateway.state.received if m.parsed and m.parsed.get("method") == "tesseron/hello")
     await mock_gateway.send_welcome(request_id=hello_msg["id"])
     await connect_task
 
@@ -151,10 +142,7 @@ async def test_st04_awaiting_claim_to_closed_on_transport_close(mock_gateway: Mo
     connect_task = asyncio.create_task(tesseron.connect_as_client(mock_gateway.url))
 
     await mock_gateway.wait_for_hello(timeout=5.0)
-    hello_msg = next(
-        m.parsed for m in mock_gateway.state.received
-        if m.parsed and m.parsed.get("method") == "tesseron/hello"
-    )
+    hello_msg = next(m.parsed for m in mock_gateway.state.received if m.parsed and m.parsed.get("method") == "tesseron/hello")
     await mock_gateway.send_welcome(request_id=hello_msg["id"])
     await connect_task
 
@@ -180,10 +168,7 @@ async def test_st05_claimed_to_closed_on_transport_close(mock_gateway: MockGatew
     connect_task = asyncio.create_task(tesseron.connect_as_client(mock_gateway.url))
 
     await mock_gateway.wait_for_hello(timeout=5.0)
-    hello_msg = next(
-        m.parsed for m in mock_gateway.state.received
-        if m.parsed and m.parsed.get("method") == "tesseron/hello"
-    )
+    hello_msg = next(m.parsed for m in mock_gateway.state.received if m.parsed and m.parsed.get("method") == "tesseron/hello")
     await mock_gateway.send_welcome(request_id=hello_msg["id"])
     await connect_task
 
@@ -308,10 +293,7 @@ async def test_st11_new_connect_yields_new_session(mock_gateway: MockGateway) ->
     tesseron1 = Tesseron(app={"id": "test_app", "name": "Test App"})
     connect_task = asyncio.create_task(tesseron1.connect_as_client(mock_gateway.url))
     await mock_gateway.wait_for_hello(timeout=5.0)
-    hello_msg = next(
-        m.parsed for m in mock_gateway.state.received
-        if m.parsed and m.parsed.get("method") == "tesseron/hello"
-    )
+    hello_msg = next(m.parsed for m in mock_gateway.state.received if m.parsed and m.parsed.get("method") == "tesseron/hello")
     await mock_gateway.send_welcome(request_id=hello_msg["id"], session_id="session_001")
     welcome1 = await connect_task
     assert welcome1.session_id == "session_001"
@@ -322,10 +304,7 @@ async def test_st11_new_connect_yields_new_session(mock_gateway: MockGateway) ->
         tesseron2 = Tesseron(app={"id": "test_app", "name": "Test App"})
         connect_task2 = asyncio.create_task(tesseron2.connect_as_client(gw2.url))
         await gw2.wait_for_hello(timeout=5.0)
-        hello_msg2 = next(
-            m.parsed for m in gw2.state.received
-            if m.parsed and m.parsed.get("method") == "tesseron/hello"
-        )
+        hello_msg2 = next(m.parsed for m in gw2.state.received if m.parsed and m.parsed.get("method") == "tesseron/hello")
         await gw2.send_welcome(request_id=hello_msg2["id"], session_id="session_002")
         welcome2 = await connect_task2
 
@@ -394,10 +373,7 @@ async def test_st13_close_fires_cancellation_signals_for_inflight_invocations(mo
 
     connect_task = asyncio.create_task(tesseron.connect_as_client(mock_gateway.url))
     await mock_gateway.wait_for_hello(timeout=5.0)
-    hello_msg = next(
-        m.parsed for m in mock_gateway.state.received
-        if m.parsed and m.parsed.get("method") == "tesseron/hello"
-    )
+    hello_msg = next(m.parsed for m in mock_gateway.state.received if m.parsed and m.parsed.get("method") == "tesseron/hello")
     await mock_gateway.send_welcome(request_id=hello_msg["id"])
     await connect_task
 
@@ -440,10 +416,7 @@ async def test_st14_close_calls_cleanup_for_all_subscriptions(mock_gateway: Mock
 
     connect_task = asyncio.create_task(tesseron.connect_as_client(mock_gateway.url))
     await mock_gateway.wait_for_hello(timeout=5.0)
-    hello_msg = next(
-        m.parsed for m in mock_gateway.state.received
-        if m.parsed and m.parsed.get("method") == "tesseron/hello"
-    )
+    hello_msg = next(m.parsed for m in mock_gateway.state.received if m.parsed and m.parsed.get("method") == "tesseron/hello")
     await mock_gateway.send_welcome(request_id=hello_msg["id"])
     await connect_task
     await mock_gateway.send_claimed_notification()
@@ -538,10 +511,7 @@ async def test_st17_reconnect_yields_new_session_id_and_claim_code(mock_gateway:
     tesseron1 = Tesseron(app={"id": "test_app", "name": "Test App"})
     connect_task = asyncio.create_task(tesseron1.connect_as_client(mock_gateway.url))
     await mock_gateway.wait_for_hello(timeout=5.0)
-    hello_msg = next(
-        m.parsed for m in mock_gateway.state.received
-        if m.parsed and m.parsed.get("method") == "tesseron/hello"
-    )
+    hello_msg = next(m.parsed for m in mock_gateway.state.received if m.parsed and m.parsed.get("method") == "tesseron/hello")
     await mock_gateway.send_welcome(request_id=hello_msg["id"], session_id="first_session")
     welcome1 = await connect_task
     assert welcome1.session_id == "first_session"
@@ -553,10 +523,7 @@ async def test_st17_reconnect_yields_new_session_id_and_claim_code(mock_gateway:
         # No resume credentials — fresh hello
         connect_task2 = asyncio.create_task(tesseron2.connect_as_client(gw2.url))
         await gw2.wait_for_hello(timeout=5.0)
-        hello_msg2 = next(
-            m.parsed for m in gw2.state.received
-            if m.parsed and m.parsed.get("method") == "tesseron/hello"
-        )
+        hello_msg2 = next(m.parsed for m in gw2.state.received if m.parsed and m.parsed.get("method") == "tesseron/hello")
         await gw2.send_welcome(request_id=hello_msg2["id"], session_id="second_session")
         welcome2 = await connect_task2
 
@@ -576,10 +543,7 @@ async def test_st18_sdk_must_not_auto_reconnect_silently(mock_gateway: MockGatew
     tesseron = Tesseron(app={"id": "test_app", "name": "Test App"})
     connect_task = asyncio.create_task(tesseron.connect_as_client(mock_gateway.url))
     await mock_gateway.wait_for_hello(timeout=5.0)
-    hello_msg = next(
-        m.parsed for m in mock_gateway.state.received
-        if m.parsed and m.parsed.get("method") == "tesseron/hello"
-    )
+    hello_msg = next(m.parsed for m in mock_gateway.state.received if m.parsed and m.parsed.get("method") == "tesseron/hello")
     await mock_gateway.send_welcome(request_id=hello_msg["id"])
     await connect_task
 
@@ -606,10 +570,7 @@ async def test_st19_resume_within_ttl_preserves_claimed_status(mock_gateway: Moc
     tesseron1 = Tesseron(app={"id": "test_app", "name": "Test App"})
     connect_task = asyncio.create_task(tesseron1.connect_as_client(mock_gateway.url))
     await mock_gateway.wait_for_hello(timeout=5.0)
-    hello_msg = next(
-        m.parsed for m in mock_gateway.state.received
-        if m.parsed and m.parsed.get("method") == "tesseron/hello"
-    )
+    hello_msg = next(m.parsed for m in mock_gateway.state.received if m.parsed and m.parsed.get("method") == "tesseron/hello")
     await mock_gateway.send_welcome(
         request_id=hello_msg["id"],
         session_id=DEFAULT_SESSION_ID,
@@ -626,9 +587,7 @@ async def test_st19_resume_within_ttl_preserves_claimed_status(mock_gateway: Moc
             "session_id": DEFAULT_SESSION_ID,
             "resume_token": welcome.resume_token,
         }
-        connect_task2 = asyncio.create_task(
-            tesseron2.connect_as_client(gw2.url, resume=resume_creds)
-        )
+        connect_task2 = asyncio.create_task(tesseron2.connect_as_client(gw2.url, resume=resume_creds))
 
         # Wait for the first message — should be tesseron/resume
         # Poll until a message arrives (MockGateway only signals hello_received for tesseron/hello)
@@ -641,9 +600,7 @@ async def test_st19_resume_within_ttl_preserves_claimed_status(mock_gateway: Moc
         assert len(gw2.state.received) > 0, "SDK did not send any message"
         first_msg = gw2.state.received[0].parsed
         assert first_msg is not None
-        assert first_msg["method"] == "tesseron/resume", (
-            f"Expected tesseron/resume, got {first_msg['method']!r}"
-        )
+        assert first_msg["method"] == "tesseron/resume", f"Expected tesseron/resume, got {first_msg['method']!r}"
 
         # Respond with a new resume welcome (rotated token)
         new_resume_token = "new_resume_token_xyz"
@@ -673,9 +630,7 @@ async def test_st20_resume_after_ttl_fails_with_32011(mock_gateway: MockGateway)
             "session_id": "expired_session",
             "resume_token": "expired_token",
         }
-        connect_task = asyncio.create_task(
-            tesseron.connect_as_client(gw.url, resume=resume_creds)
-        )
+        connect_task = asyncio.create_task(tesseron.connect_as_client(gw.url, resume=resume_creds))
 
         # Wait for first message — should be tesseron/resume
         # Poll until a message arrives
@@ -703,10 +658,7 @@ async def test_st20_resume_after_ttl_fails_with_32011(mock_gateway: MockGateway)
         await asyncio.sleep(0.2)
 
         # Find a hello message
-        hello_msgs = [
-            m.parsed for m in gw.state.received
-            if m.parsed and m.parsed.get("method") == "tesseron/hello"
-        ]
+        hello_msgs = [m.parsed for m in gw.state.received if m.parsed and m.parsed.get("method") == "tesseron/hello"]
         assert len(hello_msgs) >= 1, "SDK should fall back to tesseron/hello after -32011"
 
         # Send welcome for the hello
@@ -791,10 +743,7 @@ async def test_st22_handler_checks_cancellation_signal(mock_gateway: MockGateway
 
     connect_task = asyncio.create_task(tesseron.connect_as_client(mock_gateway.url))
     await mock_gateway.wait_for_hello(timeout=5.0)
-    hello_msg = next(
-        m.parsed for m in mock_gateway.state.received
-        if m.parsed and m.parsed.get("method") == "tesseron/hello"
-    )
+    hello_msg = next(m.parsed for m in mock_gateway.state.received if m.parsed and m.parsed.get("method") == "tesseron/hello")
     await mock_gateway.send_welcome(request_id=hello_msg["id"])
     await connect_task
     await mock_gateway.send_claimed_notification()
