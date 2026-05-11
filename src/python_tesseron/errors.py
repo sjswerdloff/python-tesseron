@@ -1,10 +1,19 @@
 """Tesseron protocol error hierarchy.
 
+Design Contract: DC-012 (ErrorModel)
+Spec Reference: §13 (Error Model)
+
 These error classes correspond directly to the error codes defined in the
 Tesseron protocol specification §13.
 
 All errors are subclasses of TesseronError, which carries the JSON-RPC
 error code, message, and optional structured data payload.
+
+Guarantees:
+- Typed error classes for all 12 protocol error codes (-32700 to -32011)
+- TesseronError in handler maps to JSON-RPC error with matching code/message/data
+- Other exceptions map to HandlerError (-32005)
+- Incoming JSON-RPC errors construct TesseronError and reject pending request
 """
 
 from __future__ import annotations
