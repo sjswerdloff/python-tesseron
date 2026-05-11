@@ -1,5 +1,8 @@
 """Pydantic models for Tesseron protocol wire types.
 
+Design Contract: DC-015 (TypeDefinitions)
+Spec Reference: §2 (Wire Format), various
+
 These models represent the JSON-RPC message envelopes and structured
 payloads defined in the Tesseron protocol specification. They are used
 both by the test suite (to construct and validate messages) and by the
@@ -8,6 +11,12 @@ SDK implementation (to parse and serialise protocol messages).
 All models use ``model_config = ConfigDict(extra="ignore")`` so that
 unknown fields added by future protocol versions are silently ignored
 rather than causing validation errors.
+
+Guarantees:
+- All wire types modeled as Pydantic BaseModel with ConfigDict(extra=ignore)
+- camelCase wire names aliased to snake_case Python names
+- JSON-RPC envelope shapes: Request, Notification, SuccessResponse, ErrorResponse
+- id may be string, int, or None per REQ-003
 """
 
 from __future__ import annotations

@@ -11,8 +11,12 @@ Tests verify:
 
 from __future__ import annotations
 
-import pytest
+from typing import Any
 
+import pytest
+from pydantic import BaseModel
+
+from python_tesseron import Tesseron
 from python_tesseron.types import ActionManifestEntry
 
 # ---------------------------------------------------------------------------
@@ -31,7 +35,6 @@ from python_tesseron.types import ActionManifestEntry
 
 
 @pytest.mark.api
-@pytest.mark.xfail(reason="implementation pending: Tesseron class and @action decorator not yet implemented")
 def test_api01_action_decorator_registers_action() -> None:
     """API-01: REQ-041. Declare action via @tesseron.action decorator, verify registration.
 
@@ -44,39 +47,91 @@ def test_api01_action_decorator_registers_action() -> None:
     Requirements:
     - REQ-041: Actions SHOULD be declared using decorators with Pydantic models.
     """
-    raise NotImplementedError
+
+    class CreateNoteInput(BaseModel):
+        title: str
+        body: str
+
+    class CreateNoteOutput(BaseModel):
+        note_id: str
+
+    tesseron = Tesseron(app={"id": "notes_app", "name": "Notes"})
+
+    @tesseron.action("createNote", input=CreateNoteInput, output=CreateNoteOutput, description="Create a note")
+    async def create_note(input: CreateNoteInput, ctx: Any) -> CreateNoteOutput:
+        return CreateNoteOutput(note_id="123")
+
+    entries = tesseron._action_registry.get_manifest_entries()
+    assert len(entries) == 1
+    assert entries[0].name == "createNote"
+    assert entries[0].description == "Create a note"
+    assert entries[0].input_schema is not None
 
 
 @pytest.mark.api
-@pytest.mark.xfail(reason="implementation pending: Tesseron class not yet implemented")
 def test_api01_action_decorator_generates_correct_input_schema() -> None:
     """API-01: REQ-041. @tesseron.action generates inputSchema from Pydantic model.
 
     The decorator must derive the JSON Schema for the action's input
     from the Pydantic model's schema, not require manual schema construction.
     """
-    raise NotImplementedError
+
+    class SearchInput(BaseModel):
+        query: str
+        limit: int = 10
+
+    tesseron = Tesseron(app={"id": "search_app", "name": "Search"})
+
+    @tesseron.action("search", input=SearchInput, description="Search")
+    async def search_action(input: SearchInput, ctx: Any) -> dict[str, Any]:
+        return {}
+
+    entries = tesseron._action_registry.get_manifest_entries()
+    assert len(entries) == 1
+    schema = entries[0].input_schema
+    assert schema is not None
+    assert schema.get("type") == "object"
+    # Pydantic generates properties from the model fields
+    assert "query" in schema.get("properties", {}) or "query" in str(schema)
 
 
 @pytest.mark.api
-@pytest.mark.xfail(reason="implementation pending: Tesseron class not yet implemented")
 def test_api01_action_decorator_with_timeout_ms() -> None:
     """API-01: REQ-041. @tesseron.action accepts timeout_ms parameter.
 
     The decorator must forward the timeout_ms override to the ActionDefinition.
     """
-    raise NotImplementedError
+    tesseron = Tesseron(app={"id": "timeout_app", "name": "Timeout Test"})
+
+    @tesseron.action("longRunning", description="Long running", timeout_ms=30_000)
+    async def long_running(input: Any, ctx: Any) -> dict[str, Any]:
+        return {}
+
+    defn = tesseron._action_registry.get_definition("longRunning")
+    assert defn.timeout_ms == 30_000
 
 
 @pytest.mark.api
-@pytest.mark.xfail(reason="implementation pending: Tesseron class not yet implemented")
 def test_api01_action_decorator_with_annotations() -> None:
     """API-01: REQ-041. @tesseron.action accepts annotations dict.
 
     The decorator must forward readOnly, destructive, and requiresConfirmation
     to the ActionDefinition's annotations.
     """
-    raise NotImplementedError
+    tesseron = Tesseron(app={"id": "annotated_app", "name": "Annotated"})
+
+    @tesseron.action(
+        "deleteOrder",
+        description="Delete an order",
+        annotations={"destructive": True, "requiresConfirmation": True},
+    )
+    async def delete_order(input: Any, ctx: Any) -> dict[str, Any]:
+        return {}
+
+    defn = tesseron._action_registry.get_definition("deleteOrder")
+    assert defn.annotations is not None
+    assert defn.annotations.destructive is True
+    assert defn.annotations.requires_confirmation is True
 
 
 # ---------------------------------------------------------------------------

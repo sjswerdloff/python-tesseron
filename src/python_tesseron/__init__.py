@@ -7,6 +7,7 @@ Protocol version: 1.2.0
 Spec reference: SPEC_tesseron_protocol_for_python.md
 """
 
+from python_tesseron.context import ActionContext
 from python_tesseron.errors import (
     ActionNotFoundError,
     CancelledError,
@@ -27,6 +28,8 @@ from python_tesseron.errors import (
     TransportClosedError,
     UnauthorizedError,
 )
+from python_tesseron.manifest import generate_instance_id
+from python_tesseron.tesseron import Tesseron
 from python_tesseron.types import (
     ActionAnnotations,
     ActionCancelParams,
@@ -65,6 +68,9 @@ from python_tesseron.types import (
 )
 
 __all__ = [
+    # Main SDK class
+    "Tesseron",
+    "ActionContext",
     # Errors
     "TesseronError",
     "ParseError",
@@ -119,4 +125,6 @@ __all__ = [
     "UdsTransport",
     "InstanceManifest",
     "SessionState",
+    # Utilities
+    "generate_instance_id",
 ]
