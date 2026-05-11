@@ -18,5 +18,8 @@ env/
 coverage.json
 results.json
 
+# Kuzu (derived artifact, built from CSVs)
+*.kuzu/
+
 # uv
 .python-version
