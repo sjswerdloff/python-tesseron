@@ -1,1 +1,131 @@
 id,title,pytest_path,test_type,status
+AT-01,Basic Action Discovery,tests/test_acceptance.py::test_at01_basic_action_discovery,acceptance,passing
+AT-02,Action Invocation with Valid Input,tests/test_acceptance.py::test_at02_action_invocation_with_valid_input,acceptance,passing
+AT-03,Input Validation Failure,tests/test_acceptance.py::test_at03_input_validation_failure,acceptance,passing
+AT-04,Long-Running Action with Progress,tests/test_acceptance.py::test_at04_long_running_action_with_progress,acceptance,passing
+AT-05,Action Confirmation,tests/test_acceptance.py::test_at05_action_confirmation,acceptance,passing
+AT-06,Sampling,tests/test_acceptance.py::test_at06_sampling,acceptance,passing
+AT-07,Transport Drop During Active Invocation,tests/test_acceptance.py::test_at07_transport_drop_during_active_invocation,acceptance,passing
+AT-08,Dynamic Action Registration,tests/test_acceptance.py::test_at08_dynamic_action_registration,acceptance,passing
+AT-09,Resource Subscription,tests/test_acceptance.py::test_at09_resource_subscription,acceptance,passing
+AT-10,Multiple Apps Simultaneously,tests/test_acceptance.py::test_at10_multiple_apps_simultaneously,acceptance,passing
+AT-11,Elicitation,tests/test_acceptance.py::test_at11_elicitation,acceptance,passing
+AT-12,Capability Gating,tests/test_acceptance.py::test_at12_capability_gating,acceptance,passing
+AT-13,Session Resume,tests/test_acceptance.py::test_at13_session_resume,acceptance,passing
+AT-14,Resume Failure and Fallback,tests/test_acceptance.py::test_at14_resume_failure_and_fallback,acceptance,passing
+AT-15,Action Timeout,tests/test_acceptance.py::test_at15_action_timeout,acceptance,passing
+AT-16,Handler Error Propagation,tests/test_acceptance.py::test_at16_handler_error_propagation,acceptance,passing
+AT-17,Strict Output Validation,tests/test_acceptance.py::test_at17_strict_output_validation,acceptance,passing
+AT-18,Structured Logging,tests/test_acceptance.py::test_at18_structured_logging,acceptance,passing
+AT-19,Claimed Notification Updates Capabilities,tests/test_acceptance.py::test_at19_claimed_notification_updates_capabilities,acceptance,passing
+AT-20,Concurrent Invocations,tests/test_acceptance.py::test_at20_concurrent_invocations,acceptance,passing
+WF-01,Request has required fields,tests/test_wire_format.py::test_wf01_request_has_required_fields,unit,passing
+WF-02,Notification has no id field,tests/test_wire_format.py::test_wf02_notification_has_no_id_field,unit,passing
+WF-03,Success response has required fields,tests/test_wire_format.py::test_wf03_success_response_has_required_fields,unit,passing
+WF-04,Error response has required fields,tests/test_wire_format.py::test_wf04_error_response_has_required_fields,unit,passing
+WF-05,Notification must not receive response,tests/test_wire_format.py::test_wf05_notification_must_not_receive_response,unit,passing
+WF-06,SDK uses monotonically incrementing IDs,tests/test_wire_format.py::test_wf06_sdk_uses_monotonically_incrementing_ids,unit,passing
+WF-07,Responding peer echoes request ID,tests/test_wire_format.py::test_wf07_responding_peer_echoes_request_id,unit,passing
+WF-08,SDK maintains pending request map,tests/test_wire_format.py::test_wf08_sdk_maintains_pending_request_map,unit,passing
+WF-09,Transport close rejects all pending,tests/test_wire_format.py::test_wf09_transport_close_rejects_all_pending,unit,passing
+WF-10,Hello is a request,tests/test_wire_format.py::test_wf10_hello_is_a_request,unit,passing
+WF-11,Progress is a notification,tests/test_wire_format.py::test_wf11_progress_is_a_notification,unit,passing
+WF-12,List changed is a notification,tests/test_wire_format.py::test_wf12_list_changed_is_a_notification,unit,passing
+WF-13,Invoke is a request,tests/test_wire_format.py::test_wf13_invoke_is_a_request,unit,passing
+WF-14,Cancel is a notification,tests/test_wire_format.py::test_wf14_cancel_is_a_notification,unit,passing
+WF-15,One envelope per WS frame,tests/test_wire_format.py::test_wf15_one_envelope_per_ws_frame,unit,passing
+WF-16,No compression no binary,tests/test_wire_format.py::test_wf16_no_compression_no_binary,unit,passing
+WF-17,Gateway sends tesseron-gateway subprotocol,tests/test_wire_format.py::test_wf17_gateway_sends_tesseron_gateway_subprotocol,unit,passing
+WF-18,App rejects upgrade without subprotocol,tests/test_wire_format.py::test_wf18_app_rejects_upgrade_without_subprotocol,unit,passing
+WF-19,App binds to loopback only,tests/test_wire_format.py::test_wf19_app_binds_to_loopback_only,unit,passing
+WF-20,App accepts exactly one upgrade,tests/test_wire_format.py::test_wf20_app_accepts_exactly_one_upgrade,unit,passing
+WF-21,App writes manifest on bind deletes on close,tests/test_wire_format.py::test_wf21_app_writes_manifest_on_bind_deletes_on_close,unit,passing
+WF-22,UDS NDJSON newline terminated,tests/test_wire_format.py::test_wf22_uds_ndjson_newline_terminated,unit,passing
+WF-23,UDS empty lines ignored,tests/test_wire_format.py::test_wf23_uds_empty_lines_ignored,unit,passing
+WF-24,UDS private directory mode 0o700,tests/test_wire_format.py::test_wf24_uds_private_directory_mode_0o700,unit,passing
+WF-25,UDS socket file mode 0o600,tests/test_wire_format.py::test_wf25_uds_socket_file_mode_0o600,unit,passing
+WF-26,UDS accepts exactly one connection,tests/test_wire_format.py::test_wf26_uds_accepts_exactly_one_connection,unit,passing
+WF-27,UDS cleanup on close,tests/test_wire_format.py::test_wf27_uds_cleanup_on_close,unit,passing
+WF-28,Dispatcher request routing,tests/test_wire_format.py::test_wf28_message_with_method_and_id_is_request,unit,passing
+WF-29,Dispatcher notification routing,tests/test_wire_format.py::test_wf29_message_with_method_no_id_is_notification,unit,passing
+WF-30,Dispatcher response resolution,tests/test_wire_format.py::test_wf30_message_with_id_and_result_is_response,unit,passing
+WF-31,Dispatcher error response rejection,tests/test_wire_format.py::test_wf31_message_with_id_and_error_is_error_response,unit,passing
+WF-32,Dispatcher ignores non-jsonrpc messages,tests/test_wire_format.py::test_wf32_message_without_jsonrpc_20_is_ignored,unit,passing
+WF-33,No handler returns MethodNotFound,tests/test_wire_format.py::test_wf33_no_handler_returns_method_not_found,unit,passing
+WF-34,Reject all pending on transport close,tests/test_wire_format.py::test_wf34_reject_all_pending_on_transport_close,unit,passing
+WF-35,Send failure closes transport,tests/test_wire_format.py::test_wf35_send_failure_closes_transport,unit,passing
+WF-36,WS binary frame coerced to UTF-8,tests/test_wire_format.py::test_wf36_ws_binary_frame_coerced_to_utf8,unit,passing
+WF-37,Instance ID uses inst- prefix,tests/test_wire_format.py::test_wf37_instance_id_uses_inst_prefix,unit,passing
+ST-01,DISCONNECTED to HANDSHAKING on open,tests/test_state_transitions.py::test_st01_disconnected_to_handshaking_on_open,unit,passing
+ST-02,HANDSHAKING to AWAITING_CLAIM on welcome,tests/test_state_transitions.py::test_st02_handshaking_to_awaiting_claim_on_welcome,unit,passing
+ST-03,AWAITING_CLAIM to CLAIMED on claim,tests/test_state_transitions.py::test_st03_awaiting_claim_to_claimed_on_claim,unit,passing
+ST-04,AWAITING_CLAIM to CLOSED on transport close,tests/test_state_transitions.py::test_st04_awaiting_claim_to_closed_on_transport_close,unit,passing
+ST-05,CLAIMED to CLOSED on transport close,tests/test_state_transitions.py::test_st05_claimed_to_closed_on_transport_close,unit,passing
+ST-06,Cannot reach AWAITING_CLAIM without HANDSHAKING,tests/test_state_transitions.py::test_st06_cannot_reach_awaiting_claim_without_handshaking,unit,passing
+ST-07,Cannot claim without handshake,tests/test_state_transitions.py::test_st07_cannot_claim_without_handshake,unit,passing
+ST-08,Cannot claim before welcome,tests/test_state_transitions.py::test_st08_cannot_claim_before_welcome,unit,passing
+ST-09,Cannot go back to AWAITING_CLAIM from CLAIMED,tests/test_state_transitions.py::test_st09_cannot_go_back_to_awaiting_claim_from_claimed,unit,passing
+ST-10,CLOSED session cannot be reclaimed,tests/test_state_transitions.py::test_st10_closed_session_cannot_be_reclaimed,unit,passing
+ST-11,New connect yields new session,tests/test_state_transitions.py::test_st11_new_connect_yields_new_session,unit,passing
+ST-12,Close rejects all pending with TransportClosedError,tests/test_state_transitions.py::test_st12_close_rejects_all_pending_with_transport_closed_error,unit,passing
+ST-13,Close fires cancellation signals,tests/test_state_transitions.py::test_st13_close_fires_cancellation_signals_for_inflight_invocations,unit,passing
+ST-14,Close calls cleanup for all subscriptions,tests/test_state_transitions.py::test_st14_close_calls_cleanup_for_all_subscriptions,unit,passing
+ST-15,Progress after close silently dropped,tests/test_state_transitions.py::test_st15_progress_after_close_silently_dropped,unit,passing
+ST-16,In-flight sample/elicit rejected with TransportClosed,tests/test_state_transitions.py::test_st16_inflight_sample_elicit_rejected_with_transport_closed,unit,passing
+ST-17,Reconnect yields new session ID and claim code,tests/test_state_transitions.py::test_st17_reconnect_yields_new_session_id_and_claim_code,unit,passing
+ST-18,SDK must not auto-reconnect silently,tests/test_state_transitions.py::test_st18_sdk_must_not_auto_reconnect_silently,unit,passing
+ST-19,Resume within TTL preserves claimed status,tests/test_state_transitions.py::test_st19_resume_within_ttl_preserves_claimed_status,unit,passing
+ST-20,Resume after TTL fails with -32011,tests/test_state_transitions.py::test_st20_resume_after_ttl_fails_with_32011,unit,passing
+ST-21,SIGINT cleans up manifest and closes transport,tests/test_state_transitions.py::test_st21_sigint_cleans_up_manifest_and_closes_transport,unit,passing
+ST-22,Handler checks cancellation signal,tests/test_state_transitions.py::test_st22_handler_checks_cancellation_signal,unit,passing
+ER-01,ParseError returns -32700,tests/test_error_model.py::test_er01_parse_error_returns_32700,unit,passing
+ER-02,InvalidRequest returns -32600,tests/test_error_model.py::test_er02_invalid_request_returns_32600,unit,passing
+ER-03,MethodNotFound returns -32601,tests/test_error_model.py::test_er03_method_not_found_returns_32601,unit,passing
+ER-04,InvalidParams returns -32602,tests/test_error_model.py::test_er04_invalid_params_returns_32602,unit,passing
+ER-05,InternalError returns -32603 with message,tests/test_error_model.py::test_er05_internal_error_returns_32603_with_message,unit,passing
+ER-06,ProtocolMismatch returns -32000,tests/test_error_model.py::test_er06_protocol_mismatch_returns_32000,unit,passing
+ER-07,Cancelled returns -32001 to handler,tests/test_error_model.py::test_er07_cancelled_returns_32001_to_handler,unit,passing
+ER-08,Timeout returns -32002,tests/test_error_model.py::test_er08_timeout_returns_32002,unit,passing
+ER-09,ActionNotFound returns -32003,tests/test_error_model.py::test_er09_action_not_found_returns_32003,unit,passing
+ER-10,InputValidation returns -32004 with issues,tests/test_error_model.py::test_er10_input_validation_returns_32004_with_issues,unit,passing
+ER-11,Handler exception maps to -32005,tests/test_error_model.py::test_er11_handler_exception_maps_to_32005,unit,passing
+ER-12,Strict output failure maps to -32005,tests/test_error_model.py::test_er12_strict_output_failure_maps_to_32005,unit,passing
+ER-13,SamplingNotAvailable when capability absent,tests/test_error_model.py::test_er13_sampling_not_available_when_capability_absent,unit,passing
+ER-14,ElicitationNotAvailable when capability absent,tests/test_error_model.py::test_er14_elicitation_not_available_when_capability_absent,unit,passing
+ER-15,SamplingDepthExceeded returns -32008,tests/test_error_model.py::test_er15_sampling_depth_exceeded_returns_32008,unit,passing
+ER-16,Unauthorized returns -32009 for wrong claim code,tests/test_error_model.py::test_er16_unauthorized_returns_32009_for_wrong_claim_code,unit,passing
+ER-17,TransportClosed rejects pending with -32010,tests/test_error_model.py::test_er17_transport_closed_rejects_pending_with_32010,unit,passing
+ER-18,ResumeFailed returns -32011,tests/test_error_model.py::test_er18_resume_failed_returns_32011,unit,passing
+ER-19,TesseronError maps to matching wire error,tests/test_error_model.py::test_er19_tesseron_error_maps_to_matching_wire_error,unit,passing
+ER-20,Non-TesseronError maps to -32005,tests/test_error_model.py::test_er20_non_tesseron_error_maps_to_32005,unit,passing
+ER-21,Incoming error constructs TesseronError,tests/test_error_model.py::test_er21_incoming_error_constructs_tesseron_error,unit,passing
+ER-22,SamplingNotAvailableError has code -32006,tests/test_error_model.py::test_er22_sampling_not_available_is_tesseron_error_with_32006,unit,passing
+ER-23,ElicitationNotAvailableError has code -32007,tests/test_error_model.py::test_er23_elicitation_not_available_is_tesseron_error_with_32007,unit,passing
+ER-24,CancelledError has code -32001,tests/test_error_model.py::test_er24_cancelled_error_is_tesseron_error_with_32001,unit,passing
+ER-25,TimeoutError has code -32002,tests/test_error_model.py::test_er25_timeout_error_is_tesseron_error_with_32002,unit,passing
+ER-26,TransportClosedError has code -32010,tests/test_error_model.py::test_er26_transport_closed_error_is_tesseron_error_with_32010,unit,passing
+ER-27,Confirm returns False when elicitation unavailable,tests/test_error_model.py::test_er27_confirm_returns_false_when_elicitation_not_available,unit,passing
+ER-28,Elicit throws when elicitation unavailable,tests/test_error_model.py::test_er28_elicit_throws_when_elicitation_not_available,unit,passing
+CP-01,Hello params include capabilities object,tests/test_capabilities.py::test_cp01_hello_params_include_capabilities_object,unit,passing
+CP-02,Welcome returns intersection of capabilities,tests/test_capabilities.py::test_cp02_welcome_returns_intersection_of_capabilities,unit,passing
+CP-03,Handler trusts intersection not app capabilities,tests/test_capabilities.py::test_cp03_handler_trusts_intersection_not_app_capabilities,unit,passing
+CP-04,All four capabilities independently negotiable,tests/test_capabilities.py::test_cp04_all_four_capabilities_independently_negotiable,unit,passing
+CP-05,Claimed notification updates agent capabilities,tests/test_capabilities.py::test_cp05_claimed_notification_updates_agent_capabilities,unit,passing
+CP-06,Handlers after claimed see updated capabilities,tests/test_capabilities.py::test_cp06_handlers_after_claimed_see_updated_capabilities,unit,passing
+CP-07,Capabilities before claimed reflect welcome values,tests/test_capabilities.py::test_cp07_capabilities_before_claimed_reflect_welcome_values,unit,passing
+CP-08,Sampling capability queryable before calling sample,tests/test_capabilities.py::test_cp08_sampling_capability_queryable_before_calling_sample,unit,passing
+CP-09,Elicitation capability queryable before calling elicit,tests/test_capabilities.py::test_cp09_elicitation_capability_queryable_before_calling_elicit,unit,passing
+CP-10,Fallback path works when capability absent,tests/test_capabilities.py::test_cp10_fallback_path_works_when_capability_absent,unit,passing
+CP-11,Happy path works when capability present,tests/test_capabilities.py::test_cp11_happy_path_works_when_capability_present,unit,passing
+CP-12,Max sampling depth defaults to 3,tests/test_capabilities.py::test_cp12_max_sampling_depth_defaults_to_3,unit,passing
+CP-13,Exceeding max sampling depth returns -32008,tests/test_capabilities.py::test_cp13_exceeding_max_sampling_depth_returns_32008,unit,passing
+CP-14,Elicit without schema uses permissive fallback,tests/test_capabilities.py::test_cp14_elicit_without_schema_uses_permissive_fallback,unit,passing
+CP-15,Hello params declare all capabilities true,tests/test_capabilities.py::test_cp15_hello_params_declare_all_capabilities_true,unit,passing
+SEC-01,Reserved app IDs and regex validation,tests/test_security.py::test_sec01_reserved_app_id_tesseron_is_invalid,unit,passing
+SEC-02,Loopback URL detection,tests/test_security.py::test_sec02_loopback_url_detection,unit,passing
+SEC-03,Tesseron directory mode 0o700,tests/test_security.py::test_sec03_tesseron_directory_mode_is_0o700,unit,passing
+SEC-04,Manifest file mode 0o600,tests/test_security.py::test_sec04_manifest_file_mode_is_0o600,unit,passing
+SEC-05,Claim breadcrumb mode 0o600,tests/test_security.py::test_sec05_claim_breadcrumb_mode_is_0o600,unit,passing
+SEC-06,RequiresConfirmation rejects uninvited invocation,tests/test_security.py::test_sec06_requires_confirmation_action_rejects_uninvited_invocation,unit,passing
+API-01,Action decorator registers action,tests/test_api.py::test_api01_action_decorator_registers_action,unit,passing
+API-02,ElicitationRequestParams require schema field,tests/test_api.py::test_api02_elicitation_request_params_require_schema_field,unit,passing

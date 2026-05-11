@@ -1,82 +1,157 @@
-requirement_id,test_id,coverage_note
-REQ-002,WF-02;WF-05,Notification has no id; must not receive response
-REQ-003,WF-06,ID may be string/number/null (tested via sequential integers)
-REQ-004,WF-06,SDK should use monotonically incrementing IDs
-REQ-005,WF-07,Responding peer must echo exact request ID
-REQ-006,WF-08,SDK must maintain pending request map
-REQ-007,WF-08,Resolve and remove pending on response
-REQ-008,WF-09;ST-12;ER-17,Pending requests rejected on transport close
-REQ-009,AT-01,hello must be first message
-REQ-010,WF-15;WF-22,Reliable ordered delivery (WS frame; NDJSON line)
-REQ-011,WF-15;WF-22,One envelope per message
-REQ-012,WF-13;WF-14,Symmetric duplex (both sides send)
-REQ-013,WF-20;WF-26,Single connection per session
-REQ-016,WF-17,App must advertise tesseron-gateway subprotocol
-REQ-017,WF-18,App must reject upgrades without subprotocol
-REQ-018,WF-19,App must bind to loopback only (WS)
-REQ-019,WF-20,App must accept exactly one WS upgrade
-REQ-020,WF-21,App must delete manifest on WS close
-REQ-021,WF-24,UDS private directory mode 0o700
-REQ-022,WF-24,UDS socket inside private directory
-REQ-023,WF-25,UDS socket should be chmod 0o600
-REQ-024,AT-01,Manifest version must be 2
-REQ-025,WF-24,Discovery directories mode 0o700
-REQ-026,WF-24,Manifest files mode 0o600
-REQ-028,WF-21;WF-27,Delete manifest on graceful shutdown
-REQ-030,AT-01,protocolVersion must be 1.2.0
-REQ-031,AT-01;AT-10,app.id must match regex; routing by app.id
-REQ-033,CP-02;CP-03;AT-12,Trust capabilities intersection
-REQ-034,CP-05;AT-19,Update agent identity on claimed
-REQ-035,AT-19,Clear claim code on claimed
-REQ-036,CP-05;AT-19,Overwrite capabilities on claimed
-REQ-037,CP-06;AT-12;AT-19,Use agentCapabilities after claimed
-REQ-038,AT-13,Stash resumeToken alongside sessionId
-REQ-039,AT-13,Persist new resumeToken after resume
-REQ-040,AT-13,Re-subscribe resources after resume
-REQ-042,AT-02,Invocation result must contain invocationId
-REQ-043,AT-02,Invocation result must contain output field
-REQ-044,AT-02;AT-03;ER-10,Validate input before handler
-REQ-045,AT-03;ER-10,Return InputValidation error on failure
-REQ-046,AT-03,Handler must not run on validation failure
-REQ-047,AT-17;ER-12,Strict output validated against schema
-REQ-048,AT-17;ER-12,Strict output failure returns HandlerError
-REQ-049,AT-08,Dynamic action registration triggers notification
-REQ-050,AT-08,Action removal triggers list_changed
-REQ-051,AT-04,Progress percent should increase monotonically
-REQ-052,ER-07;ST-13,Fire cancellation signal on cancel
-REQ-054,ER-07,Return Cancelled error on cancel
-REQ-055,AT-15;ER-08,Abort invocation after timeoutMs
-REQ-056,AT-15;ER-08,Return Timeout error on timeout
-REQ-057,AT-15;AT-20,Race handler against timeout or cancel
-REQ-060,AT-05;AT-11;ER-28,Handler must branch on elicit failure
-REQ-061,AT-11,Elicit schema top level must be object
-REQ-062,AT-11,Elicit schema properties must be primitive
-REQ-063,AT-11,Elicit schema must not use combinators
-REQ-064,AT-11,Validate elicit schema before sending
-REQ-065,AT-05;ER-27,Confirm sends empty-object schema
-REQ-068,AT-09,Cleanup on unsubscribe
-REQ-069,AT-09,Dynamic resource registration triggers notification
-REQ-070,AT-09;ST-14,All subscriptions cleaned up on transport close
-REQ-071,AT-09;ST-14,Subscription map cleared on transport close
-REQ-072,AT-09,Specific subscription cleanup on unsubscribe
-REQ-073,AT-09,Subscription removed from map on unsubscribe
-REQ-074,CP-03;AT-12,Trust capability intersection
-REQ-076,CP-05;AT-19,Overwrite capabilities on claimed if present
-REQ-077,ER-22;ER-23;ER-24;ER-25;ER-26,Typed error classes
-REQ-078,AT-16;ER-19,TesseronError mapped to JSON-RPC error
-REQ-079,AT-16;ER-20,Non-TesseronError mapped to HandlerError
-REQ-080,ER-21,Incoming error constructs TesseronError
-REQ-081,ST-12;ER-17,Pending requests rejected with TransportClosedError
-REQ-082,ST-13,In-flight invocations cancellation fired
-REQ-083,ST-14,Active subscriptions cleaned up on close
-REQ-084,ST-16,In-flight sample/confirm/elicit reject on close
-REQ-085,ST-18,SDK must not auto-reconnect
-REQ-086,WF-19,Bind to loopback only (security)
-REQ-092,WF-28;WF-29;WF-30;WF-31;WF-32,Bidirectional JSON-RPC dispatcher
-REQ-093,WF-34,Reject all pending on transport close
-REQ-094,WF-33;ER-03,MethodNotFound for unregistered method
-REQ-095,ER-19,TesseronError in handler produces error response
-REQ-096,ER-05;ER-20,Other exception sends InternalError
-REQ-097,WF-35,Send failure closes transport
-REQ-099,AT-14;ER-18,Resume failure: clear and fall back
-REQ-102,ST-17,Agent must re-claim after reconnect
+design_contract_id,test_case_id,coverage
+DC-001,WF-01,partial
+DC-001,WF-02,partial
+DC-001,WF-03,partial
+DC-001,WF-04,partial
+DC-001,WF-05,partial
+DC-001,WF-06,full
+DC-001,WF-07,full
+DC-001,WF-08,full
+DC-001,WF-09,full
+DC-001,WF-10,partial
+DC-001,WF-11,partial
+DC-001,WF-12,partial
+DC-001,WF-13,partial
+DC-001,WF-14,partial
+DC-001,WF-28,full
+DC-001,WF-29,full
+DC-001,WF-30,full
+DC-001,WF-31,full
+DC-001,WF-32,full
+DC-001,WF-33,full
+DC-001,WF-34,full
+DC-001,WF-35,full
+DC-001,ER-03,partial
+DC-001,ER-05,partial
+DC-001,ER-19,partial
+DC-001,ER-20,partial
+DC-001,ER-21,partial
+DC-002,WF-15,full
+DC-002,WF-16,full
+DC-002,WF-17,full
+DC-002,WF-18,full
+DC-002,WF-19,full
+DC-002,WF-20,full
+DC-002,WF-21,partial
+DC-002,WF-36,full
+DC-002,SEC-02,full
+DC-003,WF-22,full
+DC-003,WF-23,full
+DC-003,WF-24,full
+DC-003,WF-25,full
+DC-003,WF-26,full
+DC-003,WF-27,full
+DC-004,ST-01,full
+DC-004,ST-02,full
+DC-004,ST-03,full
+DC-004,ST-04,full
+DC-004,ST-05,full
+DC-004,ST-06,full
+DC-004,ST-07,full
+DC-004,ST-08,full
+DC-004,ST-09,full
+DC-004,ST-10,full
+DC-004,ST-11,full
+DC-004,ST-12,full
+DC-004,ST-13,partial
+DC-004,ST-14,partial
+DC-004,ST-15,full
+DC-004,ST-16,full
+DC-004,ST-17,full
+DC-004,ST-18,full
+DC-004,AT-07,full
+DC-005,AT-01,full
+DC-005,ST-01,partial
+DC-005,ST-02,partial
+DC-005,ST-03,partial
+DC-005,AT-19,full
+DC-005,CP-01,partial
+DC-005,SEC-01,full
+DC-005,ER-06,full
+DC-006,AT-02,full
+DC-006,AT-03,full
+DC-006,AT-08,full
+DC-006,AT-10,partial
+DC-006,AT-17,full
+DC-006,ER-09,full
+DC-006,ER-10,full
+DC-006,ER-11,full
+DC-006,ER-12,full
+DC-006,API-01,full
+DC-006,SEC-06,full
+DC-007,AT-09,full
+DC-007,ST-14,partial
+DC-008,AT-04,full
+DC-008,AT-15,full
+DC-008,AT-20,full
+DC-008,ER-07,full
+DC-008,ER-08,full
+DC-008,ST-13,partial
+DC-008,ST-22,full
+DC-009,AT-06,full
+DC-009,CP-12,full
+DC-009,CP-13,full
+DC-009,ER-13,full
+DC-009,ER-15,full
+DC-009,ER-22,full
+DC-010,AT-05,full
+DC-010,AT-11,full
+DC-010,CP-14,full
+DC-010,ER-14,full
+DC-010,ER-23,full
+DC-010,ER-27,full
+DC-010,ER-28,full
+DC-010,API-02,full
+DC-011,AT-12,full
+DC-011,AT-19,partial
+DC-011,CP-01,full
+DC-011,CP-02,full
+DC-011,CP-03,full
+DC-011,CP-04,full
+DC-011,CP-05,full
+DC-011,CP-06,full
+DC-011,CP-07,full
+DC-011,CP-08,full
+DC-011,CP-09,full
+DC-011,CP-10,full
+DC-011,CP-11,full
+DC-011,CP-15,full
+DC-012,ER-01,full
+DC-012,ER-02,full
+DC-012,ER-03,partial
+DC-012,ER-04,full
+DC-012,ER-05,partial
+DC-012,ER-16,full
+DC-012,ER-17,full
+DC-012,ER-18,full
+DC-012,ER-19,partial
+DC-012,ER-20,partial
+DC-012,ER-21,partial
+DC-012,ER-22,full
+DC-012,ER-23,full
+DC-012,ER-24,full
+DC-012,ER-25,full
+DC-012,ER-26,full
+DC-012,AT-16,full
+DC-013,WF-21,partial
+DC-013,WF-37,full
+DC-013,SEC-03,full
+DC-013,SEC-04,full
+DC-013,SEC-05,full
+DC-013,ST-21,full
+DC-014,AT-13,full
+DC-014,AT-14,full
+DC-014,ST-19,full
+DC-014,ST-20,full
+DC-015,WF-01,partial
+DC-015,WF-02,partial
+DC-015,WF-03,partial
+DC-015,WF-04,partial
+DC-015,API-02,partial
+DC-016,AT-05,partial
+DC-016,AT-06,partial
+DC-016,AT-12,partial
+DC-016,CP-08,partial
+DC-016,CP-09,partial
+DC-016,ER-27,partial
+DC-016,ER-28,partial
