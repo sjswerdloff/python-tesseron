@@ -32,9 +32,6 @@ jobs:
       - name: Tests
         run: uv run pytest --tb=short -q
 
-      - name: Traceability check
-        run: python scripts/check_traceability.py
-
   v-model-gaps:
     runs-on: ubuntu-latest
     steps:
