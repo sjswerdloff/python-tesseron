@@ -1,0 +1,21 @@
+scenario_id,requirement_ids,notes
+AT-01,"REQ-009;REQ-030;REQ-031;REQ-033;REQ-049",Basic Action Discovery — hello first; protocolVersion; app.id regex; trust capabilities; tool list
+AT-02,"REQ-042;REQ-043;REQ-044",Action Invocation with Valid Input — invocationId in result; output field; validate input before handler
+AT-03,"REQ-044;REQ-045;REQ-046",Input Validation Failure — validate before handler; -32004 error; handler must not run
+AT-04,"REQ-051",Long-Running Action with Progress — percent should increase monotonically
+AT-05,"REQ-060;REQ-065;REQ-075",Action Confirmation — confirm schema; ctx.confirm returns False when no elicitation; capability gating
+AT-06,"REQ-058;REQ-059;REQ-077",Sampling — validate sampling content; check capability; SamplingNotAvailableError class
+AT-07,"REQ-008;REQ-081;REQ-082;REQ-083;REQ-084",Transport Drop During Active Invocation — pending rejected; cancellation fired; subscriptions cleaned; in-flight calls rejected
+AT-08,"REQ-049;REQ-050",Dynamic Action Registration — list_changed on add; list_changed on remove
+AT-09,"REQ-068;REQ-069;REQ-070;REQ-071;REQ-072;REQ-073",Resource Subscription — cleanup on unsubscribe; list_changed; cleanup on close; clear map; specific cleanup
+AT-10,"REQ-031",Multiple Apps Simultaneously — app.id routing (distinct app IDs)
+AT-11,"REQ-060;REQ-061;REQ-062;REQ-063;REQ-064",Elicitation — handler must branch; schema constraints (object type, primitive properties, no combinators); validate before send
+AT-12,"REQ-033;REQ-037;REQ-074",Capability Gating — trust intersection; use agentCapabilities after claimed; trust intersection
+AT-13,"REQ-038;REQ-039;REQ-040",Session Resume — stash resumeToken; persist new token; re-subscribe resources
+AT-14,"REQ-099",Resume Failure and Fallback — clear credentials and fall back to hello
+AT-15,"REQ-055;REQ-056;REQ-057",Action Timeout — abort after timeoutMs; -32002 Timeout; race handler against timeout
+AT-16,"REQ-078;REQ-079",Handler Error Propagation — TesseronError mapped; other exception mapped to -32005
+AT-17,"REQ-047;REQ-048",Strict Output Validation — validate return value; -32005 with validation issues
+AT-18,"",Structured Logging — no direct RFC 2119 requirement in extracted set (log notification is fire-and-forget)
+AT-19,"REQ-034;REQ-035;REQ-036;REQ-037;REQ-076",Claimed Notification Updates Capabilities — update identity; clear claim code; overwrite capabilities; use agentCapabilities; overwrite on claimed
+AT-20,"REQ-057",Concurrent Invocations — race handler independently per invocation
