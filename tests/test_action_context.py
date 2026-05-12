@@ -18,7 +18,6 @@ Guarantees tested:
 from __future__ import annotations
 
 import asyncio
-from typing import Any
 from unittest.mock import AsyncMock
 
 import pytest
@@ -72,7 +71,7 @@ def capabilities() -> TesseronCapabilities:
 
 @pytest.fixture()
 def cancel_event() -> asyncio.Event:
-    """Cancellation event for context."""
+    """Create cancellation event for context."""
     return asyncio.Event()
 
 

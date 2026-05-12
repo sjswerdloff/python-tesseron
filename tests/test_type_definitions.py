@@ -20,30 +20,17 @@ import pytest
 from pydantic import ValidationError
 
 from python_tesseron.types import (
-    ActionAnnotations,
-    ActionCancelParams,
     ActionInvokeParams,
     ActionManifestEntry,
-    ActionProgressParams,
     AgentIdentity,
-    AppMetadata,
-    ClaimedParams,
-    ElicitationRequestParams,
-    ElicitationResult,
-    HelloParams,
-    InstanceManifest,
     JsonRpcErrorObject,
     JsonRpcErrorResponse,
     JsonRpcNotification,
     JsonRpcRequest,
     JsonRpcSuccessResponse,
-    ResumeParams,
-    SamplingRequestParams,
     TesseronCapabilities,
     WelcomeResult,
-    WsTransport,
 )
-
 
 # ---------------------------------------------------------------------------
 # TD-01: Pydantic model validation — valid construction
