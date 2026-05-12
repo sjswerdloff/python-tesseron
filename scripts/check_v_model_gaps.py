@@ -3,6 +3,7 @@
 
 Builds a Kuzu graph from traceability CSVs, then queries for:
 - Design contracts with no test coverage (untested contracts)
+- Design contracts with only partial coverage (no full verified_by edge)
 - Requirements with no design contract (unimplemented requirements)
 
 Requires v-model-traceability on PYTHONPATH or installed.
@@ -90,12 +91,23 @@ def main() -> int:
             for item in gaps.unimplemented_requirements:
                 print(f"  {item.id}: {item.title}")
 
+        if gaps.partial_only_contracts:
+            print(f"\nPARTIAL-ONLY COVERAGE ({len(gaps.partial_only_contracts)} — no full verified_by edge):")
+            for item in gaps.partial_only_contracts:
+                print(f"  {item.id}: {item.title} ({item.module})")
+
         if gaps.has_gaps:
             print(
                 f"\nFAIL: {len(gaps.untested_contracts)} untested contracts, "
                 f"{len(gaps.unimplemented_requirements)} unimplemented requirements."
             )
             return 1
+
+        if gaps.has_warnings:
+            print(
+                f"\nWARN: {len(gaps.partial_only_contracts)} design contracts have only partial coverage."
+            )
+            # Warnings don't fail — but are visible in CI output
 
         print("PASS: V-model traceability chain complete.")
         return 0
