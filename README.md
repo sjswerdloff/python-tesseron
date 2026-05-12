@@ -84,6 +84,9 @@ uv sync --dev
 ## Development
 
 ```bash
+# Install git hooks (lint + format on commit, mypy + pytest on push)
+pre-commit install && pre-commit install --hook-type pre-push
+
 # Run tests
 uv run pytest
 
