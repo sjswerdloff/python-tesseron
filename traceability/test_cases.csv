@@ -137,3 +137,122 @@ PY-05,Pyodide close destroys proxies,tests/test_transport_pyodide.py::test_py05_
 PY-06,Pyodide connection error handling,tests/test_transport_pyodide.py::test_py06_connection_error_terminates_messages_iterator,unit,passing
 PY-07,Pyodide messages iterator yields until close,tests/test_transport_pyodide.py::test_py07_messages_iterator_yields_until_close,unit,passing
 PY-08,Pyodide subprotocol tesseron-gateway,tests/test_transport_pyodide.py::test_py08_subprotocol_tesseron_gateway_passed_to_constructor,unit,passing
+GW-01,Accept inbound WebSocket with tesseron-gateway subprotocol,tests/test_gateway_server.py::test_gw01_accept_ws_with_subprotocol,unit,specified
+GW-02,Accept multiple simultaneous inbound connections,tests/test_gateway_server.py::test_gw02_accept_multiple_connections,unit,specified
+GW-03,Reject connection without subprotocol,tests/test_gateway_server.py::test_gw03_reject_no_subprotocol,unit,specified
+GW-04,Reject connection with wrong subprotocol,tests/test_gateway_server.py::test_gw04_reject_wrong_subprotocol,unit,specified
+GW-05,Accept loopback manifest URL,tests/test_gateway_server.py::test_gw05_accept_loopback_url,unit,specified
+GW-06,Refuse non-loopback manifest URL,tests/test_gateway_server.py::test_gw06_refuse_non_loopback_url,unit,specified
+GW-07,Refuse public hostname manifest URL,tests/test_gateway_server.py::test_gw07_refuse_public_hostname_url,unit,specified
+GW-08,State transition DISCONNECTED to HANDSHAKING,tests/test_gateway_session.py::test_gw08_disconnected_to_handshaking,unit,specified
+GW-09,State transition HANDSHAKING to AWAITING_CLAIM,tests/test_gateway_session.py::test_gw09_handshaking_to_awaiting_claim,unit,specified
+GW-10,State transition AWAITING_CLAIM to CLAIMED,tests/test_gateway_session.py::test_gw10_awaiting_claim_to_claimed,unit,specified
+GW-11,State transition AWAITING_CLAIM to CLOSED on transport close,tests/test_gateway_session.py::test_gw11_awaiting_claim_to_closed,unit,specified
+GW-12,State transition CLAIMED to CLOSED on transport close,tests/test_gateway_session.py::test_gw12_claimed_to_closed,unit,specified
+GW-13,Invalid transition HANDSHAKING to CLAIMED,tests/test_gateway_session.py::test_gw13_invalid_handshaking_to_claimed,unit,specified
+GW-14,Invalid transition CLAIMED to AWAITING_CLAIM,tests/test_gateway_session.py::test_gw14_invalid_claimed_to_awaiting_claim,unit,specified
+GW-15,Invalid transition CLOSED to CLAIMED,tests/test_gateway_session.py::test_gw15_invalid_closed_to_claimed,unit,specified
+GW-16,Welcome contains all required fields,tests/test_gateway_session.py::test_gw16_welcome_required_fields,unit,specified
+GW-17,Unique sessionId per session,tests/test_gateway_session.py::test_gw17_unique_session_id,unit,specified
+GW-18,Claim code matches XXXX-XX format,tests/test_gateway_session.py::test_gw18_claim_code_format,unit,specified
+GW-19,Claim code excludes ambiguous characters,tests/test_gateway_session.py::test_gw19_claim_code_no_ambiguous_chars,unit,specified
+GW-20,Claim code printed to stderr,tests/test_gateway_session.py::test_gw20_claim_code_stderr,unit,specified
+GW-21,Successful claim consumes code,tests/test_gateway_session.py::test_gw21_claim_code_single_use,unit,specified
+GW-22,Wrong claim code rejected with -32009,tests/test_gateway_session.py::test_gw22_wrong_claim_code_unauthorized,unit,specified
+GW-23,Capability intersection all-all,tests/test_gateway_session.py::test_gw23_capability_intersection_all_all,unit,specified
+GW-24,Capability intersection app-limited,tests/test_gateway_session.py::test_gw24_capability_intersection_app_limited,unit,specified
+GW-25,Capability intersection agent-limited,tests/test_gateway_session.py::test_gw25_capability_intersection_agent_limited,unit,specified
+GW-26,Capability intersection disjoint,tests/test_gateway_session.py::test_gw26_capability_intersection_disjoint,unit,specified
+GW-27,Claimed notification sent to app,tests/test_gateway_session.py::test_gw27_claimed_notification,unit,specified
+GW-28,Major version mismatch rejected,tests/test_gateway_session.py::test_gw28_major_version_mismatch,unit,specified
+GW-29,Minor version mismatch accepted,tests/test_gateway_session.py::test_gw29_minor_version_mismatch_accepted,unit,specified
+GW-30,Separate sessions with independent state,tests/test_gateway_session.py::test_gw30_independent_session_state,unit,specified
+GW-31,Claiming one session does not affect another,tests/test_gateway_session.py::test_gw31_claim_isolation,unit,specified
+GW-32,Pending outbound requests rejected on close,tests/test_gateway_session.py::test_gw32_pending_rejected_on_close,unit,specified
+GW-33,In-flight invocations cancelled on close,tests/test_gateway_session.py::test_gw33_inflight_cancelled_on_close,unit,specified
+GW-34,Active subscriptions cleaned on close,tests/test_gateway_session.py::test_gw34_subscriptions_cleaned_on_close,unit,specified
+GW-35,Action on unclaimed session rejected,tests/test_gateway_session.py::test_gw35_unclaimed_action_unauthorized,unit,specified
+GW-36,Actions registered as app_id__action_name,tests/test_gateway_mcp_bridge.py::test_gw36_tool_naming_convention,unit,specified
+GW-37,Multiple actions from same app registered,tests/test_gateway_mcp_bridge.py::test_gw37_multiple_actions_registered,unit,specified
+GW-38,Action name with underscores preserved,tests/test_gateway_mcp_bridge.py::test_gw38_underscore_in_action_name,unit,specified
+GW-39,tesseron__claim_session meta-tool,tests/test_gateway_mcp_bridge.py::test_gw39_claim_session_meta_tool,integration,specified
+GW-40,tesseron__list_actions meta-tool,tests/test_gateway_mcp_bridge.py::test_gw40_list_actions_meta_tool,integration,specified
+GW-41,tesseron__list_pending_claims meta-tool,tests/test_gateway_mcp_bridge.py::test_gw41_list_pending_claims_meta_tool,integration,specified
+GW-42,Resources exposed with tesseron URI,tests/test_gateway_mcp_bridge.py::test_gw42_resource_uri_format,unit,specified
+GW-43,tools/list_changed on session connect,tests/test_gateway_mcp_bridge.py::test_gw43_tools_changed_on_connect,unit,specified
+GW-44,tools/list_changed on session claim,tests/test_gateway_mcp_bridge.py::test_gw44_tools_changed_on_claim,unit,specified
+GW-45,tools/list_changed on session drop,tests/test_gateway_mcp_bridge.py::test_gw45_tools_changed_on_drop,unit,specified
+GW-46,resources/list_changed on resource added,tests/test_gateway_mcp_bridge.py::test_gw46_resources_changed_on_add,unit,specified
+GW-47,resources/list_changed on resource removed,tests/test_gateway_mcp_bridge.py::test_gw47_resources_changed_on_remove,unit,specified
+GW-48,Log forwarded as sendLoggingMessage,tests/test_gateway_mcp_bridge.py::test_gw48_log_forwarding,unit,specified
+GW-49,FastMCP used as MCP server foundation,tests/test_gateway_mcp_bridge.py::test_gw49_fastmcp_foundation,unit,specified
+GW-50,Tool call routed to correct app,tests/test_gateway_action_router.py::test_gw50_routing_by_app_id,integration,specified
+GW-51,actions/invoke forwarded to app,tests/test_gateway_action_router.py::test_gw51_invoke_forwarded,unit,specified
+GW-52,Unknown app_id returns ActionNotFoundError,tests/test_gateway_action_router.py::test_gw52_unknown_app_id,unit,specified
+GW-53,Progress forwarded with progressToken,tests/test_gateway_action_router.py::test_gw53_progress_with_token,unit,specified
+GW-54,Progress not forwarded without progressToken,tests/test_gateway_action_router.py::test_gw54_progress_without_token,unit,specified
+GW-55,Cancel sent on agent cancellation,tests/test_gateway_action_router.py::test_gw55_cancel_on_agent_cancel,unit,specified
+GW-56,Cancel sent on timeout,tests/test_gateway_action_router.py::test_gw56_cancel_on_timeout,unit,specified
+GW-57,Default 60000ms timeout enforced,tests/test_gateway_action_router.py::test_gw57_default_timeout,integration,specified
+GW-58,Custom timeoutMs respected,tests/test_gateway_action_router.py::test_gw58_custom_timeout,unit,specified
+GW-59,Action completing before timeout succeeds,tests/test_gateway_action_router.py::test_gw59_action_before_timeout,unit,specified
+GW-60,Invocation on unclaimed session rejected,tests/test_gateway_action_router.py::test_gw60_unclaimed_invocation,unit,specified
+GW-61,sampling/request translated to createMessage,tests/test_gateway_sampling.py::test_gw61_sampling_translation,unit,specified
+GW-62,LLM response returned to app,tests/test_gateway_sampling.py::test_gw62_sampling_response,unit,specified
+GW-63,Sampling depth 1 succeeds,tests/test_gateway_sampling.py::test_gw63_depth_1_succeeds,unit,specified
+GW-64,Sampling depth 3 succeeds at boundary,tests/test_gateway_sampling.py::test_gw64_depth_3_boundary,unit,specified
+GW-65,Sampling depth 4 fails at boundary+1,tests/test_gateway_sampling.py::test_gw65_depth_4_fails,unit,specified
+GW-66,Depth exceeded error includes data,tests/test_gateway_sampling.py::test_gw66_depth_exceeded_error_data,unit,specified
+GW-67,SamplingNotAvailableError without capability,tests/test_gateway_sampling.py::test_gw67_sampling_not_available,unit,specified
+GW-68,elicitation/request translated to elicitInput,tests/test_gateway_elicitation.py::test_gw68_elicitation_translation,unit,specified
+GW-69,Accept with value returned to app,tests/test_gateway_elicitation.py::test_gw69_accept_with_value,unit,specified
+GW-70,Decline returned to app,tests/test_gateway_elicitation.py::test_gw70_decline,unit,specified
+GW-71,Cancel returned to app,tests/test_gateway_elicitation.py::test_gw71_cancel,unit,specified
+GW-72,ElicitationNotAvailableError without capability,tests/test_gateway_elicitation.py::test_gw72_elicitation_not_available,unit,specified
+GW-73,InvalidParamsError on schema violations,tests/test_gateway_elicitation.py::test_gw73_invalid_schema,unit,specified
+GW-74,Disconnected session retained as zombie,tests/test_gateway_resume.py::test_gw74_zombie_retention,unit,specified
+GW-75,Default TTL 90 seconds within boundary,tests/test_gateway_resume.py::test_gw75_default_ttl_within,unit,specified
+GW-76,Resume at TTL boundary succeeds,tests/test_gateway_resume.py::test_gw76_ttl_boundary,unit,specified
+GW-77,Resume after TTL fails,tests/test_gateway_resume.py::test_gw77_ttl_exceeded,unit,specified
+GW-78,Configurable TTL respected,tests/test_gateway_resume.py::test_gw78_configurable_ttl,unit,specified
+GW-79,Constant-time token comparison,tests/test_gateway_resume.py::test_gw79_constant_time_comparison,unit,specified
+GW-80,Successful resume returns rotated token,tests/test_gateway_resume.py::test_gw80_token_rotation,unit,specified
+GW-81,Rotated token different from original,tests/test_gateway_resume.py::test_gw81_rotated_token_differs,unit,specified
+GW-82,Old token rejected after rotation,tests/test_gateway_resume.py::test_gw82_old_token_rejected,unit,specified
+GW-83,Unknown sessionId resume fails,tests/test_gateway_resume.py::test_gw83_unknown_session_fails,unit,specified
+GW-84,Bad resumeToken fails,tests/test_gateway_resume.py::test_gw84_bad_token_fails,unit,specified
+GW-85,TTL elapsed resume fails,tests/test_gateway_resume.py::test_gw85_ttl_elapsed_fails,unit,specified
+GW-86,Cross-app resume fails,tests/test_gateway_resume.py::test_gw86_cross_app_fails,unit,specified
+GW-87,Unclaimed zombie resume fails,tests/test_gateway_resume.py::test_gw87_unclaimed_zombie_fails,unit,specified
+GW-88,Watches manifest directory,tests/test_gateway_manifest.py::test_gw88_watches_directory,unit,specified
+GW-89,Discovered manifest triggers dial,tests/test_gateway_manifest.py::test_gw89_manifest_triggers_dial,integration,specified
+GW-90,Running pid not flagged stale,tests/test_gateway_manifest.py::test_gw90_running_pid_not_stale,unit,specified
+GW-91,Dead pid flagged stale,tests/test_gateway_manifest.py::test_gw91_dead_pid_stale,unit,specified
+GW-92,Missing discovery directory handled,tests/test_gateway_manifest.py::test_gw92_missing_directory,unit,specified
+GW-93,Multi-app action isolation,tests/test_gateway_integration.py::test_gw93_multi_app_isolation,integration,specified
+GW-94,Zombie session does not block other apps,tests/test_gateway_integration.py::test_gw94_zombie_no_blocking,integration,specified
+GW-95,Concurrent claim attempts,tests/test_gateway_integration.py::test_gw95_concurrent_claims,integration,specified
+GW-96,Concurrent action invocations,tests/test_gateway_integration.py::test_gw96_concurrent_invocations,integration,specified
+GW-97,Full gateway lifecycle end-to-end,tests/test_gateway_integration.py::test_gw97_full_lifecycle_e2e,acceptance,specified
+TD-01,Request valid construction,tests/test_type_definitions.py::TestPydanticValidation::test_td01_request_valid_construction,unit,passing
+TD-02,Request id types string int None,tests/test_type_definitions.py::TestPydanticValidation::test_td02_request_id_types,unit,passing
+TD-03,Notification has no id field,tests/test_type_definitions.py::TestPydanticValidation::test_td03_notification_no_id,unit,passing
+TD-04,All four envelope shapes,tests/test_type_definitions.py::TestPydanticValidation::test_td04_envelope_shapes,unit,passing
+TD-05,Missing required field raises ValidationError,tests/test_type_definitions.py::TestPydanticValidation::test_td05_request_missing_required_field,unit,passing
+TD-06,ErrorResponse missing error raises ValidationError,tests/test_type_definitions.py::TestPydanticValidation::test_td06_error_response_missing_error,unit,passing
+TD-07,snake_case to camelCase serialization,tests/test_type_definitions.py::TestCamelCaseAliasing::test_td07_snake_to_camel_serialization,unit,passing
+TD-08,camelCase to snake_case parsing,tests/test_type_definitions.py::TestCamelCaseAliasing::test_td08_camel_to_snake_parsing,unit,passing
+TD-09,ActionManifestEntry aliasing round-trip,tests/test_type_definitions.py::TestCamelCaseAliasing::test_td09_action_manifest_aliasing,unit,passing
+TD-10,Full aliasing round-trip lossless,tests/test_type_definitions.py::TestCamelCaseAliasing::test_td10_aliasing_round_trip,unit,passing
+TD-11,Unknown fields silently dropped,tests/test_type_definitions.py::TestExtraIgnore::test_td11_unknown_fields_dropped,unit,passing
+TD-12,Extra fields no ValidationError,tests/test_type_definitions.py::TestExtraIgnore::test_td12_extra_ignore_no_error,unit,passing
+TD-13,Extra ignore on nested models,tests/test_type_definitions.py::TestExtraIgnore::test_td13_extra_ignore_on_nested_models,unit,passing
+AC-01,ctx.agent returns agent identity,tests/test_action_context.py::TestContextIdentity::test_ac01_agent_identity,unit,passing
+AC-02,ctx.agent_capabilities returns authoritative set,tests/test_action_context.py::TestContextIdentity::test_ac02_agent_capabilities,unit,passing
+AC-03,invocation_id and client metadata,tests/test_action_context.py::TestContextIdentity::test_ac03_invocation_id_and_client,unit,passing
+AC-04,ctx.signal fires on cancellation,tests/test_action_context.py::TestContextSignal::test_ac04_signal_fires,unit,passing
+AC-05,ctx.progress delegates to emitter,tests/test_action_context.py::TestContextProgress::test_ac05_progress_emits,unit,passing
+AC-06,ctx.progress optional params,tests/test_action_context.py::TestContextProgress::test_ac06_progress_optional_params,unit,passing
+AC-07,ctx.log emits structured notification,tests/test_action_context.py::TestContextLog::test_ac07_log_emits,unit,passing
+AC-08,ctx.log without meta,tests/test_action_context.py::TestContextLog::test_ac08_log_without_meta,unit,passing
+AC-09,ctx.log swallows exceptions,tests/test_action_context.py::TestContextLog::test_ac09_log_swallows_exceptions,unit,passing
