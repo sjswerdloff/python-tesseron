@@ -51,3 +51,35 @@ jobs:
         run: >
           PYTHONPATH=/tmp/v-model-traceability
           python scripts/check_v_model_gaps.py
+
+  v-model-enforce:
+    if: always()
+    needs: v-model-gaps
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Check for implementation changes
+        id: check-src
+        run: |
+          if git diff --name-only origin/main...HEAD | grep -q '^src/'; then
+            echo "src_changed=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "src_changed=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Enforce gap analysis on implementation PRs
+        run: |
+          if [ "${{ steps.check-src.outputs.src_changed }}" != "true" ]; then
+            echo "PASS: No implementation changes — gap analysis is informational only."
+            exit 0
+          fi
+          if [ "${{ needs.v-model-gaps.result }}" != "success" ]; then
+            echo "FAIL: Implementation changes require a clean V-model traceability chain."
+            echo "The v-model-gaps job reported gaps. All requirements must have design contracts"
+            echo "and all design contracts must have test cases before implementation can merge."
+            exit 1
+          fi
+          echo "PASS: Implementation changes present and V-model traceability chain is complete."
