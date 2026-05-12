@@ -234,3 +234,25 @@ GW-94,Zombie session does not block other apps,tests/test_gateway_integration.py
 GW-95,Concurrent claim attempts,tests/test_gateway_integration.py::test_gw95_concurrent_claims,integration,specified
 GW-96,Concurrent action invocations,tests/test_gateway_integration.py::test_gw96_concurrent_invocations,integration,specified
 GW-97,Full gateway lifecycle end-to-end,tests/test_gateway_integration.py::test_gw97_full_lifecycle_e2e,acceptance,specified
+TD-01,Request valid construction,tests/test_type_definitions.py::TestPydanticValidation::test_td01_request_valid_construction,unit,passing
+TD-02,Request id types string int None,tests/test_type_definitions.py::TestPydanticValidation::test_td02_request_id_types,unit,passing
+TD-03,Notification has no id field,tests/test_type_definitions.py::TestPydanticValidation::test_td03_notification_no_id,unit,passing
+TD-04,All four envelope shapes,tests/test_type_definitions.py::TestPydanticValidation::test_td04_envelope_shapes,unit,passing
+TD-05,Missing required field raises ValidationError,tests/test_type_definitions.py::TestPydanticValidation::test_td05_request_missing_required_field,unit,passing
+TD-06,ErrorResponse missing error raises ValidationError,tests/test_type_definitions.py::TestPydanticValidation::test_td06_error_response_missing_error,unit,passing
+TD-07,snake_case to camelCase serialization,tests/test_type_definitions.py::TestCamelCaseAliasing::test_td07_snake_to_camel_serialization,unit,passing
+TD-08,camelCase to snake_case parsing,tests/test_type_definitions.py::TestCamelCaseAliasing::test_td08_camel_to_snake_parsing,unit,passing
+TD-09,ActionManifestEntry aliasing round-trip,tests/test_type_definitions.py::TestCamelCaseAliasing::test_td09_action_manifest_aliasing,unit,passing
+TD-10,Full aliasing round-trip lossless,tests/test_type_definitions.py::TestCamelCaseAliasing::test_td10_aliasing_round_trip,unit,passing
+TD-11,Unknown fields silently dropped,tests/test_type_definitions.py::TestExtraIgnore::test_td11_unknown_fields_dropped,unit,passing
+TD-12,Extra fields no ValidationError,tests/test_type_definitions.py::TestExtraIgnore::test_td12_extra_ignore_no_error,unit,passing
+TD-13,Extra ignore on nested models,tests/test_type_definitions.py::TestExtraIgnore::test_td13_extra_ignore_on_nested_models,unit,passing
+AC-01,ctx.agent returns agent identity,tests/test_action_context.py::TestContextIdentity::test_ac01_agent_identity,unit,passing
+AC-02,ctx.agent_capabilities returns authoritative set,tests/test_action_context.py::TestContextIdentity::test_ac02_agent_capabilities,unit,passing
+AC-03,invocation_id and client metadata,tests/test_action_context.py::TestContextIdentity::test_ac03_invocation_id_and_client,unit,passing
+AC-04,ctx.signal fires on cancellation,tests/test_action_context.py::TestContextSignal::test_ac04_signal_fires,unit,passing
+AC-05,ctx.progress delegates to emitter,tests/test_action_context.py::TestContextProgress::test_ac05_progress_emits,unit,passing
+AC-06,ctx.progress optional params,tests/test_action_context.py::TestContextProgress::test_ac06_progress_optional_params,unit,passing
+AC-07,ctx.log emits structured notification,tests/test_action_context.py::TestContextLog::test_ac07_log_emits,unit,passing
+AC-08,ctx.log without meta,tests/test_action_context.py::TestContextLog::test_ac08_log_without_meta,unit,passing
+AC-09,ctx.log swallows exceptions,tests/test_action_context.py::TestContextLog::test_ac09_log_swallows_exceptions,unit,passing
