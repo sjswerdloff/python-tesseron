@@ -16,14 +16,47 @@ All tests are marked xfail until GatewayElicitationBridge is implemented.
 
 from __future__ import annotations
 
+from typing import Any
+
 import pytest
+
+from python_tesseron.errors import ElicitationNotAvailableError, InvalidParamsError
+from python_tesseron.gateway.elicitation_bridge import GatewayElicitationBridge
+from python_tesseron.types import TesseronCapabilities
+
+
+def _make_session(elicitation_enabled: bool = True) -> Any:
+    """Create a minimal mock session for elicitation tests."""
+
+    class MockSession:
+        negotiated_capabilities = TesseronCapabilities(
+            streaming=True,
+            subscriptions=True,
+            sampling=True,
+            elicitation=elicitation_enabled,
+        )
+
+    return MockSession()
+
+
+def _make_elicitation_params(
+    question: str = "What is your preference?",
+    schema: dict[str, Any] | None = None,
+    invocation_id: str = "inv_001",
+) -> dict[str, Any]:
+    """Build elicitation/request params dict."""
+    return {
+        "invocationId": invocation_id,
+        "question": question,
+        "schema": schema or {"type": "object", "properties": {"answer": {"type": "string"}}},
+    }
+
 
 # ---------------------------------------------------------------------------
 # GW-68: elicitation/request translated to MCP elicitInput (REQ-127)
 # ---------------------------------------------------------------------------
 
 
-@pytest.mark.xfail(reason="gateway implementation pending")
 async def test_gw68_elicitation_translation() -> None:
     """GW-68: elicitation/request translated to MCP elicitInput.
 
@@ -31,7 +64,20 @@ async def test_gw68_elicitation_translation() -> None:
     elicitInput, forwarding the question and schema parameters.
     REQ-127
     """
-    pytest.fail("Not implemented")
+    mcp_calls: list[dict[str, Any]] = []
+
+    async def mock_mcp_client(elicit_params: dict[str, Any]) -> dict[str, Any]:
+        mcp_calls.append(elicit_params)
+        return {"action": "accept", "content": {"answer": "yes"}}
+
+    bridge = GatewayElicitationBridge(mcp_client=mock_mcp_client)
+    session = _make_session(elicitation_enabled=True)
+
+    await bridge.handle_elicitation_request(session, _make_elicitation_params())
+
+    assert len(mcp_calls) == 1
+    # Verify the question was forwarded
+    assert "message" in mcp_calls[0] or "question" in mcp_calls[0] or mcp_calls[0].get("message") is not None
 
 
 # ---------------------------------------------------------------------------
@@ -39,7 +85,6 @@ async def test_gw68_elicitation_translation() -> None:
 # ---------------------------------------------------------------------------
 
 
-@pytest.mark.xfail(reason="gateway implementation pending")
 async def test_gw69_accept_with_value() -> None:
     """GW-69: Accept result with value returned to app.
 
@@ -47,7 +92,17 @@ async def test_gw69_accept_with_value() -> None:
     value, the app receives ElicitationResult with action=accept and the value.
     REQ-127
     """
-    pytest.fail("Not implemented")
+
+    async def mock_mcp_client(elicit_params: dict[str, Any]) -> dict[str, Any]:
+        return {"action": "accept", "content": {"answer": "yes"}}
+
+    bridge = GatewayElicitationBridge(mcp_client=mock_mcp_client)
+    session = _make_session(elicitation_enabled=True)
+
+    result = await bridge.handle_elicitation_request(session, _make_elicitation_params())
+
+    assert result["action"] == "accept"
+    assert result.get("value") is not None
 
 
 # ---------------------------------------------------------------------------
@@ -55,7 +110,6 @@ async def test_gw69_accept_with_value() -> None:
 # ---------------------------------------------------------------------------
 
 
-@pytest.mark.xfail(reason="gateway implementation pending")
 async def test_gw70_decline() -> None:
     """GW-70: Decline result returned to app.
 
@@ -63,7 +117,16 @@ async def test_gw70_decline() -> None:
     ElicitationResult with action=decline.
     REQ-127
     """
-    pytest.fail("Not implemented")
+
+    async def mock_mcp_client(elicit_params: dict[str, Any]) -> dict[str, Any]:
+        return {"action": "decline"}
+
+    bridge = GatewayElicitationBridge(mcp_client=mock_mcp_client)
+    session = _make_session(elicitation_enabled=True)
+
+    result = await bridge.handle_elicitation_request(session, _make_elicitation_params())
+
+    assert result["action"] == "decline"
 
 
 # ---------------------------------------------------------------------------
@@ -71,7 +134,6 @@ async def test_gw70_decline() -> None:
 # ---------------------------------------------------------------------------
 
 
-@pytest.mark.xfail(reason="gateway implementation pending")
 async def test_gw71_cancel() -> None:
     """GW-71: Cancel result returned to app.
 
@@ -79,7 +141,16 @@ async def test_gw71_cancel() -> None:
     ElicitationResult with action=cancel.
     REQ-127
     """
-    pytest.fail("Not implemented")
+
+    async def mock_mcp_client(elicit_params: dict[str, Any]) -> dict[str, Any]:
+        return {"action": "cancel"}
+
+    bridge = GatewayElicitationBridge(mcp_client=mock_mcp_client)
+    session = _make_session(elicitation_enabled=True)
+
+    result = await bridge.handle_elicitation_request(session, _make_elicitation_params())
+
+    assert result["action"] == "cancel"
 
 
 # ---------------------------------------------------------------------------
@@ -87,7 +158,6 @@ async def test_gw71_cancel() -> None:
 # ---------------------------------------------------------------------------
 
 
-@pytest.mark.xfail(reason="gateway implementation pending")
 async def test_gw72_elicitation_not_available() -> None:
     """GW-72: ElicitationNotAvailableError (-32007) when agent lacks elicitation capability.
 
@@ -95,7 +165,13 @@ async def test_gw72_elicitation_not_available() -> None:
     include elicitation, an app elicitation/request is rejected with -32007.
     REQ-127
     """
-    pytest.fail("Not implemented")
+    bridge = GatewayElicitationBridge()
+    session = _make_session(elicitation_enabled=False)
+
+    with pytest.raises(ElicitationNotAvailableError) as exc_info:
+        await bridge.handle_elicitation_request(session, _make_elicitation_params())
+
+    assert exc_info.value.code == -32007
 
 
 # ---------------------------------------------------------------------------
@@ -103,7 +179,6 @@ async def test_gw72_elicitation_not_available() -> None:
 # ---------------------------------------------------------------------------
 
 
-@pytest.mark.xfail(reason="gateway implementation pending")
 async def test_gw73_invalid_schema() -> None:
     """GW-73: InvalidParamsError (-32602) on elicitation schema constraint violations.
 
@@ -112,4 +187,13 @@ async def test_gw73_invalid_schema() -> None:
     -32602 InvalidParams before forwarding to the agent.
     REQ-127
     """
-    pytest.fail("Not implemented")
+    bridge = GatewayElicitationBridge()
+    session = _make_session(elicitation_enabled=True)
+
+    # Schema with non-object root type
+    invalid_schema_params = _make_elicitation_params(schema={"type": "string"})
+
+    with pytest.raises(InvalidParamsError) as exc_info:
+        await bridge.handle_elicitation_request(session, invalid_schema_params)
+
+    assert exc_info.value.code == -32602

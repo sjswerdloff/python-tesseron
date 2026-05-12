@@ -20,15 +20,48 @@ does not yet exist.
 
 from __future__ import annotations
 
-import pytest
+import json
+import os
+import time
+from pathlib import Path
+from typing import Any
+
+from python_tesseron.gateway.manifest_watcher import (
+    GatewayManifestWatcher,
+    is_manifest_stale,
+    is_pid_running,
+)
+from python_tesseron.types import InstanceManifest, WsTransport
+
+# ---------------------------------------------------------------------------
+# Helpers
+# ---------------------------------------------------------------------------
+
+
+def _write_manifest(directory: Path, instance_id: str, pid: int | None, url: str = "ws://127.0.0.1:9999/") -> Path:
+    """Write a manifest JSON file to the discovery directory."""
+    manifest_data: dict[str, Any] = {
+        "version": 2,
+        "instanceId": instance_id,
+        "appName": "Test App",
+        "addedAt": int(time.time() * 1000),
+        "transport": {"kind": "ws", "url": url},
+    }
+    if pid is not None:
+        manifest_data["pid"] = pid
+
+    path = directory / f"{instance_id}.json"
+    with path.open("w") as f:
+        json.dump(manifest_data, f)
+    return path
+
 
 # ---------------------------------------------------------------------------
 # DC-025: GatewayManifestWatcher — Directory Watching (REQ-146)
 # ---------------------------------------------------------------------------
 
 
-@pytest.mark.xfail(reason="gateway implementation pending")
-async def test_gw88_watches_directory() -> None:
+async def test_gw88_watches_directory(tmp_path: Path) -> None:
     """GW-88: Watches ~/.tesseron/instances/ for manifest files.
 
     Verifies: DC-025 — manifest directory watching.
@@ -37,11 +70,17 @@ async def test_gw88_watches_directory() -> None:
     Write a manifest file to the watched directory and verify the watcher
     detects its presence.
     """
-    pytest.fail("Not implemented")
+    watcher = GatewayManifestWatcher(directory=tmp_path)
+
+    _write_manifest(tmp_path, "inst-001", pid=None)
+
+    manifests = watcher.scan()
+    instance_ids = [m.instance_id for m in manifests]
+
+    assert "inst-001" in instance_ids
 
 
-@pytest.mark.xfail(reason="gateway implementation pending")
-async def test_gw89_manifest_triggers_dial() -> None:
+async def test_gw89_manifest_triggers_dial(tmp_path: Path) -> None:
     """GW-89: Discovered manifest triggers app dial.
 
     Verifies: DC-025 — valid manifest with loopback WS URL causes the
@@ -52,7 +91,20 @@ async def test_gw89_manifest_triggers_dial() -> None:
     URL to the watched directory and verify the gateway attempts to
     connect to that URL.
     """
-    pytest.fail("Not implemented")
+    dialled_urls: list[str] = []
+
+    async def mock_dial(url: str) -> None:
+        dialled_urls.append(url)
+
+    watcher = GatewayManifestWatcher(directory=tmp_path, dial_callback=mock_dial)
+
+    # Write a manifest with a loopback WS URL and no pid (non-stale)
+    _write_manifest(tmp_path, "inst-dial", pid=None, url="ws://127.0.0.1:9999/")
+
+    await watcher.poll()
+
+    assert len(dialled_urls) >= 1
+    assert dialled_urls[0] == "ws://127.0.0.1:9999/"
 
 
 # ---------------------------------------------------------------------------
@@ -60,7 +112,6 @@ async def test_gw89_manifest_triggers_dial() -> None:
 # ---------------------------------------------------------------------------
 
 
-@pytest.mark.xfail(reason="gateway implementation pending")
 async def test_gw90_running_pid_not_stale() -> None:
     """GW-90: Running pid not flagged stale.
 
@@ -73,10 +124,19 @@ async def test_gw90_running_pid_not_stale() -> None:
     Write a manifest with the pid of a known-running process (e.g. the
     current test process) and verify the watcher does not flag it stale.
     """
-    pytest.fail("Not implemented")
+    running_pid = os.getpid()  # Current test process is definitely running
+    manifest = InstanceManifest(
+        version=2,
+        instanceId="inst-running",
+        appName="Test",
+        addedAt=int(time.time() * 1000),
+        pid=running_pid,
+        transport=WsTransport(kind="ws", url="ws://127.0.0.1:9999/"),
+    )
+
+    assert is_manifest_stale(manifest) is False
 
 
-@pytest.mark.xfail(reason="gateway implementation pending")
 async def test_gw91_dead_pid_stale() -> None:
     """GW-91: Dead pid flagged stale.
 
@@ -90,7 +150,20 @@ async def test_gw91_dead_pid_stale() -> None:
     large pid number that was never assigned) and verify the watcher
     flags the manifest as stale.
     """
-    pytest.fail("Not implemented")
+    # Use a very large PID that is almost certainly not running
+    dead_pid = 2_147_483_647  # Max int32, virtually never a real process
+    assert is_pid_running(dead_pid) is False
+
+    manifest = InstanceManifest(
+        version=2,
+        instanceId="inst-dead",
+        appName="Test",
+        addedAt=int(time.time() * 1000),
+        pid=dead_pid,
+        transport=WsTransport(kind="ws", url="ws://127.0.0.1:9999/"),
+    )
+
+    assert is_manifest_stale(manifest) is True
 
 
 # ---------------------------------------------------------------------------
@@ -98,8 +171,7 @@ async def test_gw91_dead_pid_stale() -> None:
 # ---------------------------------------------------------------------------
 
 
-@pytest.mark.xfail(reason="gateway implementation pending")
-async def test_gw92_missing_directory() -> None:
+async def test_gw92_missing_directory(tmp_path: Path) -> None:
     """GW-92: Missing discovery directory handled gracefully.
 
     Verifies: DC-025 — when ~/.tesseron/instances/ does not exist the
@@ -111,4 +183,15 @@ async def test_gw92_missing_directory() -> None:
     the watcher responds with FileNotFoundError or creates the directory
     and continues without error.
     """
-    pytest.fail("Not implemented")
+    non_existent_dir = tmp_path / "does" / "not" / "exist"
+    watcher = GatewayManifestWatcher(directory=non_existent_dir)
+
+    # The watcher should either create the directory or raise FileNotFoundError
+    try:
+        manifests = watcher.scan()
+        # If we get here, directory was created — verify it now exists
+        assert non_existent_dir.exists()
+        assert manifests == []
+    except FileNotFoundError:
+        # Also acceptable per REQ-146
+        pass
