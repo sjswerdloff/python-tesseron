@@ -46,6 +46,50 @@ Using `@pytest.mark.xfail(reason="implementation pending: ...")` for all SDK-int
 
 By writing careful structural tests (error codes, model fields, regex validation, state ordering, JSON-RPC envelope rules), 50 tests pass from stubs alone. This validates that the stub types and errors modules are correctly structured, and gives immediate CI feedback without requiring the full SDK.
 
+---
+
+## Gateway implementation — Cora (cora-2f1e43dc)
+**Date:** 2026-05-12
+**Branch:** cora/gateway-implementation
+
+### asyncio.Lock for atomic claim-code consumption
+
+Two concurrent `handle_claim()` calls on the same session with the same claim code must produce exactly one success and one `UnauthorizedError`. The natural Python approach (`if code == stored_code: delete; claim`) is not atomic. Wrapping the claim check+delete in an `asyncio.Lock` per session manager makes it atomic within a single event loop, which is sufficient because asyncio is single-threaded. This is the correct pattern for gateway-level concurrency — no threading or multiprocessing needed.
+
+### elicitation schema validation before capability check
+
+The test suite (GW-72 and GW-73) implies schema validation fires before the capability check in `GatewayElicitationBridge`. If it were reversed, a session without elicitation capability would receive -32007 even for an invalid schema, and the -32602 path would only be exercised for capable sessions. Ordering: validate schema first (-32602) then check capability (-32007) — this means an invalid schema raises even when elicitation is disabled, which is more consistent behavior.
+
+### UP041: builtin TimeoutError vs ruff alias rule
+
+Ruff UP041 requires using the builtin `TimeoutError` instead of `asyncio.TimeoutError` in `except` clauses. But when you also need to import a project-specific `TimeoutError` from `python_tesseron.errors`, there is a naming conflict. Resolution: use the builtin `TimeoutError` directly in the `except TimeoutError:` clause (UP041 satisfied), and alias only the project-specific one: `from python_tesseron.errors import TimeoutError as TesseronTimeoutError`. Ruff also requires this aliased import to be in its own separate `from ... import (...)` block (I001 constraint).
+
+### TRY300: no return inside try block
+
+Ruff TRY300 forbids `return True` inside a `try:` block. The fix is to move the return value into an `else:` block after the `except` clauses. Pattern:
+
+```python
+try:
+    os.kill(pid, 0)
+except ProcessLookupError:
+    return False
+except PermissionError:
+    return True  # TRY300 violation — must move
+else:
+    return True  # Correct placement
+```
+
+### is_pid_running PermissionError semantics
+
+On Unix, `os.kill(pid, 0)` raises `PermissionError` when the process EXISTS but the caller lacks permission to signal it. This is not an error from the gateway's perspective — the process is alive. Catch `PermissionError` and return `True` (process is running). Only `ProcessLookupError` (process not found) should return `False`.
+
+### Unused import cleanup pattern for test files
+
+When removing xfail markers from pre-written test stubs, the stub imports often include things that were never used (planned for future use or copied from the requirements). Run `ruff check --output-format=json | jq '.[] | {file, rule, message}'` to identify all F401/F841 violations before committing. Common patterns:
+- `pytest` imported but test uses no `pytest.raises` or markers
+- `SessionState` imported but only `session.state` comparisons in tests that actually use other attributes
+- Local `import hmac` inside a test function that does source inspection — move to module level or remove
+
 ### Traceability gap fixing: two categories of fix
 
 When a requirement traceability checker reports unreferenced requirements, there are two categories of resolution:
