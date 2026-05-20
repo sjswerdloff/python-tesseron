@@ -22,5 +22,9 @@ results.json
 *.kuzu/
 *.kuzu
 
+# Code graph (derived artifact)
+code-graph.db/
+code-graph.db
+
 # uv
 .python-version
