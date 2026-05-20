@@ -1,0 +1,5 @@
+id,name,purpose,classification,domain_type,status,approved_by,approval_date
+BC-PT-001,AppSDK,"Client-side library for Tesseron app developers. Declares actions, handles local invocations, manages app-side session lifecycle.",Core,,draft,,
+BC-PT-002,Gateway,"Server-side bridge between Tesseron apps and MCP agents. Manages WebSocket connections, routes actions to MCP tools, bridges elicitation and sampling.",Core,,draft,,
+BC-PT-003,Transport,"Wire-level message delivery across multiple protocols (UDS, WebSocket server, WebSocket client, Pyodide). Protocol-agnostic send/receive/close contract.",Supporting,,draft,,
+BC-PT-004,Protocol,"JSON-RPC dispatch, handshake, capability negotiation, error model, and shared type definitions. Consumed by both AppSDK and Gateway.",Generic,,draft,,

@@ -1,0 +1,6 @@
+from_bc,to_bc,pattern,direction,rationale
+BC-PT-002,BC-PT-004,Customer-Supplier,downstream,Gateway consumes Protocol types and dispatcher; Protocol defines the wire format contract
+BC-PT-001,BC-PT-004,Customer-Supplier,downstream,AppSDK consumes Protocol types and dispatcher; Protocol defines the wire format contract
+BC-PT-002,BC-PT-003,Customer-Supplier,downstream,Gateway uses Transport for WebSocket server connections to apps
+BC-PT-001,BC-PT-003,Customer-Supplier,downstream,AppSDK uses Transport for UDS/WebSocket client connections to gateway
+BC-PT-002,BC-PT-001,Separate-Ways,none,Gateway and AppSDK share no direct code; they communicate only via the Tesseron wire protocol
