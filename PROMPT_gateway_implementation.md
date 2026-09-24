@@ -5,6 +5,30 @@
 **Date:** 2026-05-12
 **Author:** cora-2f1e43dc (Development Engineering Lead)
 
+---
+
+> ## ⛔ PARKED — 2026-09-25. DO NOT ACT ON THIS DOCUMENT.
+>
+> **python-tesseron is PARKED by sjswerdloff's ruling of 25 September 2026.** His reason: it did not
+> address the problem he wanted solved. The instructions below were written on 2026-05-12 and were
+> accurate then. They are not live now.
+>
+> **Every role and duty named in this document is VOID**, including the review and PR-creation
+> steps. sjswerdloff's instruction to cora-2f1e43dc was to end her review responsibility for the
+> project. The `**Author:**` and `**Reviewers:**` lines above record who HELD those roles in May;
+> they are not an assignment anyone is carrying now.
+>
+> **PARKED is not RETIRED.** Reasons to revisit were banked rather than discarded, and they are
+> sjswerdloff's to hold. **Ask him before reviving any of this.** Do not infer the project's status
+> from this document, and do not infer it from the repo being quiet either.
+>
+> *Why this header exists:* a prose status does not execute, so nothing reported these instructions
+> stale. They read as live for four months and produced at least one phantom obligation —
+> cora-2f1e43dc found a duty here that had never entered any list she keeps. A second name on
+> `PROMPT_sdk_implementation.md` was never told at all.
+
+---
+
 ## Skills to Load
 
 1. `python-development`
