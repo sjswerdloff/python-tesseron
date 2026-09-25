@@ -1,5 +1,15 @@
 # python-tesseron
 
+> ## ⛔ STATUS: PARKED — 2026-09-25
+>
+> Parked by sjswerdloff's ruling: it did not address the problem he wanted solved. Nothing here is
+> under active development, and the instructions in the `PROMPT_*.md` documents are **not live** —
+> each carries its own header saying so, and every role those documents assign is void.
+>
+> **PARKED is not RETIRED.** Reasons to revisit were banked rather than discarded and are
+> sjswerdloff's to hold. **Ask him before reviving this or building on it**, and do not infer the
+> status from the repository being quiet.
+
 A Python implementation of the [Tesseron protocol](https://github.com/BrainBlend-AI/tesseron) for exposing typed application actions to AI agents via MCP over WebSocket.
 
 Built on [FastMCP](https://github.com/jlowin/fastmcp) and [Pydantic](https://docs.pydantic.dev/).
